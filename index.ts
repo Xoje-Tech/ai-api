@@ -1,10 +1,7 @@
 import { serve } from '@hono/node-server';
-import type { AIService, ChatMessage } from './types';
+import type { AIService } from './types';
 import { initDB } from './db';
-import { corsResponse, htmlResponse } from './utils/response';
-import { landingHTML } from './views/landing';
-import { handleUsers } from './routes/users';
-import { createChatHandler } from './routes/chat';
+import { buildApp } from './src/app.js';
 
 console.log('[startup] Checking environment variables...');
 
@@ -56,45 +53,17 @@ if (services.length === 0) {
   process.exit(1);
 }
 
-console.log(`[startup] ${services.length} service(s) ready: ${services.map(s => s.name).join(', ')}`);
-let currentServiceIndex = 0;
-
-function getNextService() {
-  const service = services[currentServiceIndex]!;
-  currentServiceIndex = (currentServiceIndex + 1) % services.length;
-  return service;
-}
+console.log(`[startup] ${services.length} service(s) ready: ${services.map((s) => s.name).join(', ')}`);
 
 await initDB();
 
-const handleChat = createChatHandler(getNextService);
-
+const app = buildApp({ services });
 const port = Number(process.env.PORT ?? 3000);
 
 serve({
   port,
   hostname: '0.0.0.0',
-  async fetch(req) {
-    const url = new URL(req.url);
-    const { pathname } = url;
-
-    if (req.method === 'OPTIONS') return corsResponse();
-
-    if (req.method === 'GET' && pathname === '/') {
-      return htmlResponse(landingHTML(url.origin));
-    }
-
-    if (req.method === 'POST' && pathname === '/chat') {
-      return handleChat(req);
-    }
-
-    if (pathname.startsWith('/users')) {
-      const response = await handleUsers(req, url, pathname);
-      if (response) return response;
-    }
-
-    return new Response("Not found", { status: 404 });
-  }
+  fetch: app.fetch,
 });
 
 console.log(`Server is running on http://localhost:${port}`);
