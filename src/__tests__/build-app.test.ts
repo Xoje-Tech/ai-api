@@ -67,8 +67,8 @@ describe('buildApp (legacy behaviour)', () => {
   });
 
   it('streams the first service response on POST /chat', async () => {
-    const groqStub = stubService('Groq', 'hello from Groq');
-    const cerebrasStub = stubService('Cerebras', 'hello from Cerebras');
+    const groqStub = stubService('Groq', 'Hello from Groq');
+    const cerebrasStub = stubService('Cerebras', 'Hello from Cerebras');
     const app = buildApp({ services: [groqStub, cerebrasStub] });
 
     const res = await app.request('/chat', {
@@ -82,6 +82,31 @@ describe('buildApp (legacy behaviour)', () => {
     expect(res.status).toBe(200);
     expect(res.headers.get('content-type')).toBe('text/event-stream');
     const body = await readStreamBody(res);
-    expect(body).toBe('hello from Groq');
+    expect(body).toBe('Hello from Groq');
+  });
+
+  it('returns 400 with Zod issues when /chat body is invalid', async () => {
+    const app = buildApp({ services: [stubService('Groq', 'x')] });
+    const res = await app.request('/chat', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ messages: [] }),
+    });
+    expect(res.status).toBe(400);
+    const body = (await res.json()) as { error: string; issues: unknown[] };
+    expect(body.error).toBe('Invalid request');
+    expect(Array.isArray(body.issues)).toBe(true);
+  });
+
+  it('returns 400 with plain text when /chat body is not JSON', async () => {
+    const app = buildApp({ services: [stubService('Groq', 'x')] });
+    const res = await app.request('/chat', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: 'not json',
+    });
+    expect(res.status).toBe(400);
+    const body = (await res.json()) as { error: string };
+    expect(body.error).toBe('Invalid JSON body');
   });
 });

@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { buildApp } from '../app.js';
 import { InMemoryUserRepository } from '../modules/users/infrastructure/persistence/in-memory-user.repository.js';
+import type { User } from '../modules/users/domain/entities/user.js';
 
 describe('/users routes (with InMemoryUserRepository)', () => {
   let app: ReturnType<typeof buildApp>;
@@ -95,5 +96,89 @@ describe('/users routes (with InMemoryUserRepository)', () => {
     const res = await app.request('/users?limit=2');
     const users = (await res.json()) as { name: string }[];
     expect(users).toHaveLength(2);
+  });
+
+  it('GET /users returns 500 when the repo throws', async () => {
+    const failingRepo = {
+      list: async () => {
+        throw new Error('boom');
+      },
+      findById: async () => null,
+      create: async () => {
+        throw new Error('unused');
+      },
+      delete: async () => null,
+    };
+    const app = buildApp({ services: [], userRepository: failingRepo });
+
+    const res = await app.request('/users');
+    expect(res.status).toBe(500);
+    const body = (await res.json()) as { error: string };
+    expect(body.error).toContain('boom');
+  });
+
+  it('GET /users/:id returns 500 when the repo throws', async () => {
+    const failingRepo = {
+      list: async () => [],
+      findById: async () => {
+        throw new Error('db down');
+      },
+      create: async () => {
+        throw new Error('unused');
+      },
+      delete: async () => null,
+    };
+    const app = buildApp({ services: [], userRepository: failingRepo });
+
+    const res = await app.request('/users/1');
+    expect(res.status).toBe(500);
+    const body = (await res.json()) as { error: string };
+    expect(body.error).toContain('db down');
+  });
+
+  it('DELETE /users/:id returns 500 when the repo throws on delete', async () => {
+    const failingRepo = {
+      list: async () => [],
+      findById: async () => null,
+      create: async () => {
+        throw new Error('unused');
+      },
+      delete: async () => {
+        throw new Error('cannot delete');
+      },
+    };
+    const app = buildApp({ services: [], userRepository: failingRepo });
+
+    const res = await app.request('/users/1', { method: 'DELETE' });
+    expect(res.status).toBe(500);
+    const body = (await res.json()) as { error: string };
+    expect(body.error).toContain('cannot delete');
+  });
+
+  it('POST /users returns 400 when JSON body is malformed', async () => {
+    const app = buildApp({
+      services: [],
+      userRepository: new InMemoryUserRepository(),
+    });
+    const res = await app.request('/users', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: 'not json',
+    });
+    expect(res.status).toBe(400);
+    const body = (await res.json()) as { error: string };
+    expect(body.error).toBe('Invalid JSON body');
+  });
+
+  it('InMemoryUserRepository throws DuplicateEmailError on duplicate email', async () => {
+    const { DuplicateEmailError } = await import(
+      '../modules/users/domain/ports/user-repository.port.js'
+    );
+    const repo = new InMemoryUserRepository();
+    await repo.create({ name: 'Ada', email: 'dupe@example.com' });
+
+    await expect(
+      repo.create({ name: 'Ada2', email: 'dupe@example.com' }),
+    ).rejects.toBeInstanceOf(DuplicateEmailError);
   });
 });
