@@ -15,6 +15,7 @@
     "@hono/node-server": "^1.13.7",
     "@openrouter/sdk": "0.9.11",
     "groq-sdk": "0.37.0",
+    "hono": "4.12.27",
     "pino": "10.3.1",
     "postgres": "^3.4.4",
     "zod": "4.4.3"

@@ -20,6 +20,9 @@ importers:
       groq-sdk:
         specifier: 0.37.0
         version: 0.37.0
+      hono:
+        specifier: 4.12.27
+        version: 4.12.27
       pino:
         specifier: 10.3.1
         version: 10.3.1
