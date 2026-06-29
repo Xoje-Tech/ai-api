@@ -1,13 +1,21 @@
 import { serve } from '@hono/node-server';
-import type { AIService } from './types';
-import { initDB } from './db';
-import { buildApp } from './src/app.js';
+
+import { buildApp } from './app.js';
+import { CircuitBreakerBalancer } from './modules/ai-balancer/application/balancer/circuit-breaker-balancer.js';
+import {
+  createGroqClient,
+  createGroqService,
+} from './modules/ai-balancer/infrastructure/adapters/groq.adapter.js';
+import {
+  createOpenRouterClient,
+  createOpenRouterService,
+} from './modules/ai-balancer/infrastructure/adapters/openrouter.adapter.js';
+import type { AIService } from './modules/ai-balancer/domain/ports/ai-service.port.js';
 
 console.log('[startup] Checking environment variables...');
 
 const requiredEnvVars: Record<string, string | undefined> = {
   GROQ_API_KEY: process.env.GROQ_API_KEY,
-  CEREBRAS_API_KEY: process.env.CEREBRAS_API_KEY,
   OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY,
   DATABASE_URL: process.env.DATABASE_URL,
 };
@@ -25,16 +33,14 @@ console.log(`[startup] PORT=${process.env.PORT ?? '3000 (default)'}`);
 const services: AIService[] = [];
 
 try {
-  const { groqService } = await import('./services/groq');
-  services.push(groqService);
+  services.push(createGroqService(createGroqClient()));
   console.log('[startup] ✓ Groq service loaded');
 } catch (err) {
   console.error('[startup] ✗ Failed to load Groq service:', (err as Error).message);
 }
 
 try {
-  const { openrouterService } = await import('./services/openrouter');
-  services.push(openrouterService);
+  services.push(createOpenRouterService(createOpenRouterClient()));
   console.log('[startup] ✓ OpenRouter service loaded');
 } catch (err) {
   console.error('[startup] ✗ Failed to load OpenRouter service:', (err as Error).message);
@@ -47,9 +53,12 @@ if (services.length === 0) {
 
 console.log(`[startup] ${services.length} service(s) ready: ${services.map((s) => s.name).join(', ')}`);
 
-await initDB();
+const balancer = new CircuitBreakerBalancer(services, {
+  failureThreshold: 3,
+  cooldownMs: 30 * 1000,
+});
 
-const app = buildApp({ services });
+const app = buildApp({ services, balancer });
 const port = Number(process.env.PORT ?? 3000);
 
 serve({
