@@ -1,8 +1,0 @@
-[Unit]
-Description=Renew GitHub App installation token (gandalf-xoje)
-After=network-online.target
-Wants=network-online.target
-
-[Service]
-Type=oneshot
-ExecStart=%h/.hermes/scripts/renew-gh-token.sh
