@@ -68,8 +68,8 @@ describe('buildApp (legacy behaviour)', () => {
 
   it('streams the first service response on POST /chat', async () => {
     const groqStub = stubService('Groq', 'Hello from Groq');
-    const cerebrasStub = stubService('Cerebras', 'Hello from Cerebras');
-    const app = buildApp({ services: [groqStub, cerebrasStub] });
+    const openrouterStub = stubService('OpenRouter', 'Hello from OpenRouter');
+    const app = buildApp({ services: [groqStub, openrouterStub] });
 
     const res = await app.request('/chat', {
       method: 'POST',

@@ -8,10 +8,17 @@
     "test": "vitest",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "knowledge:regen": "tsx scripts/regenerate-knowledge.ts",
+    "knowledge:lint": "tsx scripts/lint-knowledge-bundle.ts",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "src/modules/*/infrastructure/adapters/*.ts": "pnpm exec tsx scripts/regenerate-knowledge.ts --target adapters",
+    "src/modules/*/interface/routes/*.ts": "pnpm exec tsx scripts/regenerate-knowledge.ts --target api",
+    ".env.example": "pnpm exec tsx scripts/regenerate-knowledge.ts --target env"
   },
   "dependencies": {
-    "@cerebras/cerebras_cloud_sdk": "1.59.0",
     "@hono/node-server": "^1.13.7",
     "@openrouter/sdk": "0.9.11",
     "groq-sdk": "0.37.0",
@@ -23,6 +30,8 @@
   "devDependencies": {
     "@types/node": "^20.11.0",
     "@vitest/coverage-v8": "4.1.9",
+    "husky": "9.1.7",
+    "lint-staged": "17.0.8",
     "tsx": "^4.7.1",
     "typescript": "^5.3.3",
     "vitest": "4.1.9"
