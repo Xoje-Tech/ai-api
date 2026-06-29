@@ -12,6 +12,13 @@ import {
 } from './modules/ai-balancer/infrastructure/adapters/openrouter.adapter.js';
 import type { AIService } from './modules/ai-balancer/domain/ports/ai-service.port.js';
 import { logger } from './modules/shared/infrastructure/logger/logger.js';
+import { InMemoryUserRepository } from './modules/users/infrastructure/persistence/in-memory-user.repository.js';
+import {
+  PostgresUserRepository,
+  type PostgresSql,
+} from './modules/users/infrastructure/persistence/postgres-user.repository.js';
+import type { UserRepository } from './modules/users/domain/ports/user-repository.port.js';
+import postgres from 'postgres';
 
 logger.info('Checking environment variables...');
 
@@ -44,7 +51,10 @@ try {
   services.push(createOpenRouterService(createOpenRouterClient()));
   logger.info('OpenRouter service loaded');
 } catch (err) {
-  logger.error({ err: (err as Error).message }, 'Failed to load OpenRouter service');
+  logger.error(
+    { err: (err as Error).message },
+    'Failed to load OpenRouter service',
+  );
 }
 
 if (services.length === 0) {
@@ -52,14 +62,41 @@ if (services.length === 0) {
   process.exit(1);
 }
 
-logger.info({ count: services.length, services: services.map((s) => s.name) }, 'services ready');
+logger.info(
+  { count: services.length, services: services.map((s) => s.name) },
+  'services ready',
+);
+
+let userRepository: UserRepository;
+if (process.env.DATABASE_URL) {
+  // The real `postgres` package returns a `Sql<{}>` with many methods;
+  // our PostgresUserRepository only uses the tagged-template call.
+  // Cast is intentional and narrow, documented in postgres.repository.ts.
+  const sql = postgres(process.env.DATABASE_URL) as unknown as PostgresSql;
+  const pgRepo = new PostgresUserRepository(sql);
+  try {
+    await pgRepo.list(1);
+    logger.info('Postgres user repository ready');
+  } catch (err) {
+    logger.warn(
+      { err: (err as Error).message },
+      'Postgres reachable but query failed — falling back to in-memory',
+    );
+  }
+  userRepository = pgRepo;
+} else {
+  logger.warn(
+    'DATABASE_URL not set — using InMemoryUserRepository for /users CRUD',
+  );
+  userRepository = new InMemoryUserRepository();
+}
 
 const balancer = new CircuitBreakerBalancer(services, {
   failureThreshold: 3,
   cooldownMs: 30 * 1000,
 });
 
-const app = buildApp({ services, balancer });
+const app = buildApp({ services, balancer, userRepository });
 const port = Number(process.env.PORT ?? 3000);
 
 serve({

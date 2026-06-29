@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { buildApp } from '../app.js';
-import type { AIService } from '../../types.js';
+import type { AIService } from '../modules/ai-balancer/domain/ports/ai-service.port.js';
 
 const stubService = (name: string, content: string): AIService => ({
   name,

@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import type { AIService } from '../types.js';
+import type { AIService } from './modules/ai-balancer/domain/ports/ai-service.port.js';
 import { RoundRobinBalancer } from './modules/ai-balancer/application/balancer/round-robin-balancer.js';
 import type { Balancer } from './modules/ai-balancer/application/balancer/balancer.js';
 import { handleChat } from './modules/ai-balancer/interface/routes/chat.route.js';
