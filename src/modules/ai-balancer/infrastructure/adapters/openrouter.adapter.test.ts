@@ -47,13 +47,13 @@ describe('openrouter adapter', () => {
     expect(send).toHaveBeenCalledTimes(1);
 
     const req = send.mock.calls[0]![0];
-    expect(req.model).toBe('openrouter/free');
-    expect(req.messages).toEqual([
+    expect(req.chatGenerationParams.model).toBe('openrouter/free');
+    expect(req.chatGenerationParams.messages).toEqual([
       { role: 'system', content: 'be brief' },
       { role: 'user', content: 'hi' },
       { role: 'assistant', content: 'hi back' },
     ]);
-    expect(req.stream).toBe(true);
+    expect(req.chatGenerationParams.stream).toBe(true);
   });
 
   it('yields empty strings when a chunk delta has no content', async () => {

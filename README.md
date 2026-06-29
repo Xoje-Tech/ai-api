@@ -19,12 +19,19 @@ input validation, structured logging, and a health endpoint.
 
 ```bash
 pnpm install
+pnpm dev     # tsx watch src/index.ts
+```
 
+The server reads API keys from `process.env`. In the Hermes ecosystem,
+these are managed by **Bitwarden Secrets Manager** (BWS) — see
+[Deployment](#deployment). For standalone development, you can export
+them directly:
+
+```bash
 export GROQ_API_KEY=***       # free at https://console.groq.com
 export OPENROUTER_API_KEY=*** # free at https://openrouter.ai
 export DATABASE_URL=...        # optional, only for /users CRUD
-
-pnpm dev     # tsx watch src/index.ts
+pnpm dev
 ```
 
 The server boots on `http://localhost:3000` (override with `PORT`).
@@ -132,6 +139,10 @@ a port.
 | `LOG_LEVEL`          | no (default info) | pino level: trace/debug/info/warn/error/fatal |
 | `LOG_PRETTY`         | no                | `=1` for human-readable transport in dev |
 
+All secrets come from the runtime environment. **Never commit secrets
+to the repository.** See [Deployment](#deployment) for production
+secret management.
+
 If every LLM provider is missing at boot, the process exits with code
 1.
 
@@ -145,3 +156,26 @@ Two legacy files remain at the repo root pending a future phase:
 
 The legacy `/chat` path is fully replaced; the migration of `/users`
 is a future phase.
+
+## Deployment
+
+### Secrets management
+
+All API keys (`GROQ_API_KEY`, `OPENROUTER_API_KEY`, `DATABASE_URL`,
+etc.) are provided **exclusively through the runtime environment**.
+The application itself has no built-in secret resolution — it reads
+`process.env` at startup and logs a warning for any missing variable.
+
+For any deployment target (production, staging, preview), secrets MUST
+be provisioned through an external **secrets manager** such as:
+
+| Provider | How |
+|----------|-----|
+| **Bitwarden Secrets Manager** | Fetch via `bws secret list <project> --output json` and export to the process environment |
+| **Infisical** | `infisical run -- pnpm start` |
+| **HashiCorp Vault** | Vault agent template + envconsul |
+| **Docker/Kubernetes** | `--secret` / `Secret` resource mounted as env |
+| **Cloud provider** | AWS Secrets Manager, GCP Secret Manager, Doppler, etc. |
+
+The same principle applies locally: secrets are loaded by the Hermes
+ecosystem through BWS — no `.env` file checked in.

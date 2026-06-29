@@ -11,9 +11,11 @@ import type { AIService, ChatMessage } from '../../domain/ports/ai-service.port.
 export interface OpenRouterClient {
   chat: {
     send: (request: {
-      model: string;
-      messages: Message[];
-      stream: true;
+      chatGenerationParams: {
+        model: string;
+        messages: Message[];
+        stream: true;
+      };
     }) => Promise<AsyncIterable<ChatStreamingResponseChunk>>;
   };
 }
@@ -44,9 +46,11 @@ export function createOpenRouterService(client: OpenRouterClient): AIService {
     name: 'OpenRouter',
     async chat(messages: ChatMessage[]) {
       const stream = await client.chat.send({
-        model: MODEL_FREE,
-        messages: messages.map(toOpenRouterMessage),
-        stream: true,
+        chatGenerationParams: {
+          model: MODEL_FREE,
+          messages: messages.map(toOpenRouterMessage),
+          stream: true,
+        },
       });
       return (async function* () {
         for await (const chunk of stream) {

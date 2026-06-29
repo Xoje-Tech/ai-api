@@ -3,6 +3,7 @@ import type { AIService } from './modules/ai-balancer/domain/ports/ai-service.po
 import { RoundRobinBalancer } from './modules/ai-balancer/application/balancer/round-robin-balancer.js';
 import type { Balancer } from './modules/ai-balancer/application/balancer/balancer.js';
 import { handleChat } from './modules/ai-balancer/interface/routes/chat.route.js';
+import { handleOpenAIChat } from './modules/ai-balancer/interface/routes/openai-chat.route.js';
 import { handleUsers } from './modules/users/interface/routes/users.route.js';
 import type { UserRepository } from './modules/users/domain/ports/user-repository.port.js';
 import { InMemoryUserRepository } from './modules/users/infrastructure/persistence/in-memory-user.repository.js';
@@ -61,6 +62,23 @@ export function buildApp(options: BuildAppOptions): Hono {
 
     if (c.req.method === 'POST' && c.req.path === '/chat') {
       return handleChat(c.req.raw, balancer);
+    }
+
+    // ── OpenAI-compatible endpoints ─────────────────────────────────
+    if (c.req.method === 'GET' && c.req.path === '/v1/models') {
+      return jsonResponse({
+        object: 'list',
+        data: services.map((s) => ({
+          id: s.name.toLowerCase(),
+          object: 'model',
+          created: 0,
+          owned_by: 'ai-api',
+        })),
+      });
+    }
+
+    if (c.req.method === 'POST' && c.req.path === '/v1/chat/completions') {
+      return handleOpenAIChat(c.req.raw, balancer);
     }
 
     if (c.req.path.startsWith('/users')) {
