@@ -1,41 +1,36 @@
 import { Hono } from 'hono';
 import type { AIService } from '../types.js';
+import { RoundRobinBalancer } from './modules/ai-balancer/application/balancer/round-robin-balancer.js';
+import type { Balancer } from './modules/ai-balancer/application/balancer/balancer.js';
+import { handleChat } from './modules/ai-balancer/interface/routes/chat.route.js';
 import { corsResponse, htmlResponse } from '@shared/infrastructure/http/response.js';
 import { landingHTML } from '@shared/interface/views/landing.js';
 import { handleUsers } from '../routes/users.js';
-import { createChatHandler } from '../routes/chat.js';
 
 export interface BuildAppOptions {
   services: AIService[];
+  /**
+   * Optional balancer strategy. Defaults to RoundRobinBalancer so the
+   * legacy /chat round-robin behaviour is preserved when callers
+   * don't pass one. Pass a CircuitBreakerBalancer to opt in to
+   * failover + breaker semantics — see src/modules/ai-balancer/
+   * application/balancer/circuit-breaker-balancer.ts.
+   */
+  balancer?: Balancer;
 }
 
 /**
- * buildApp returns a Hono instance configured with all the legacy routes.
+ * buildApp returns a Hono instance configured with all routes.
  *
- * This duplicates the routing logic in index.ts verbatim — temporarily —
- * so the application becomes testable via `app.request()` without binding
- * a port. Sub-fase 2.x of the hexagonal refactor will move each layer
- * (routes, services, db) into src/modules/* and reduce this file to a
- * thin composition root.
+ * The hexagonal chat handler now uses the streamChat use-case with
+ * an injected Balancer strategy. The balancer can be swapped at
+ * composition time without touching routing code.
  */
 export function buildApp(options: BuildAppOptions): Hono {
-  const { services } = options;
+  const { services, balancer: providedBalancer } = options;
+  const balancer: Balancer = providedBalancer ?? new RoundRobinBalancer(services);
   const app = new Hono();
 
-  let currentServiceIndex = 0;
-  function getNextService(): AIService {
-    if (services.length === 0) {
-      throw new Error('buildApp: no services configured');
-    }
-    const service = services[currentServiceIndex]!;
-    currentServiceIndex = (currentServiceIndex + 1) % services.length;
-    return service;
-  }
-
-  const handleChat = createChatHandler(getNextService);
-
-  // Match the legacy index.ts routing exactly. OPTIONS handled globally,
-  // then a single catch-all routes by pathname prefix.
   app.all('*', async (c) => {
     if (c.req.method === 'OPTIONS') {
       return corsResponse();
@@ -48,7 +43,7 @@ export function buildApp(options: BuildAppOptions): Hono {
     }
 
     if (c.req.method === 'POST' && c.req.path === '/chat') {
-      return handleChat(c.req.raw);
+      return handleChat(c.req.raw, balancer);
     }
 
     if (c.req.path.startsWith('/users')) {
