@@ -3,9 +3,11 @@ import type { AIService } from '../types.js';
 import { RoundRobinBalancer } from './modules/ai-balancer/application/balancer/round-robin-balancer.js';
 import type { Balancer } from './modules/ai-balancer/application/balancer/balancer.js';
 import { handleChat } from './modules/ai-balancer/interface/routes/chat.route.js';
+import { handleUsers } from './modules/users/interface/routes/users.route.js';
+import type { UserRepository } from './modules/users/domain/ports/user-repository.port.js';
+import { InMemoryUserRepository } from './modules/users/infrastructure/persistence/in-memory-user.repository.js';
 import { corsResponse, htmlResponse, jsonResponse } from '@shared/infrastructure/http/response.js';
 import { landingHTML } from '@shared/interface/views/landing.js';
-import { handleUsers } from '../routes/users.js';
 
 export interface BuildAppOptions {
   services: AIService[];
@@ -17,18 +19,25 @@ export interface BuildAppOptions {
    * application/balancer/circuit-breaker-balancer.ts.
    */
   balancer?: Balancer;
+  /**
+   * Optional UserRepository. Defaults to InMemoryUserRepository so the
+   * /users CRUD is exercisable without Postgres. Production wiring
+   * passes a PostgresUserRepository.
+   */
+  userRepository?: UserRepository;
 }
 
 /**
  * buildApp returns a Hono instance configured with all routes.
  *
- * The hexagonal chat handler now uses the streamChat use-case with
- * an injected Balancer strategy. The balancer can be swapped at
- * composition time without touching routing code.
+ * - /chat uses the streamChat use-case with an injected Balancer.
+ * - /users uses the hexagonal users module with an injected repo.
+ * - /health reports the loaded services.
  */
 export function buildApp(options: BuildAppOptions): Hono {
-  const { services, balancer: providedBalancer } = options;
+  const { services, balancer: providedBalancer, userRepository } = options;
   const balancer: Balancer = providedBalancer ?? new RoundRobinBalancer(services);
+  const userRepo: UserRepository = userRepository ?? new InMemoryUserRepository();
   const app = new Hono();
 
   app.all('*', async (c) => {
@@ -55,7 +64,7 @@ export function buildApp(options: BuildAppOptions): Hono {
     }
 
     if (c.req.path.startsWith('/users')) {
-      const response = await handleUsers(c.req.raw, url, c.req.path);
+      const response = await handleUsers(c.req.raw, url, c.req.path, userRepo);
       if (response) return response;
     }
 
