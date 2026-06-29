@@ -3,7 +3,7 @@ import type { AIService } from '../types.js';
 import { RoundRobinBalancer } from './modules/ai-balancer/application/balancer/round-robin-balancer.js';
 import type { Balancer } from './modules/ai-balancer/application/balancer/balancer.js';
 import { handleChat } from './modules/ai-balancer/interface/routes/chat.route.js';
-import { corsResponse, htmlResponse } from '@shared/infrastructure/http/response.js';
+import { corsResponse, htmlResponse, jsonResponse } from '@shared/infrastructure/http/response.js';
 import { landingHTML } from '@shared/interface/views/landing.js';
 import { handleUsers } from '../routes/users.js';
 
@@ -40,6 +40,14 @@ export function buildApp(options: BuildAppOptions): Hono {
 
     if (c.req.method === 'GET' && c.req.path === '/') {
       return htmlResponse(landingHTML(url.origin));
+    }
+
+    if (c.req.method === 'GET' && c.req.path === '/health') {
+      return jsonResponse({
+        status: 'ok',
+        services: services.map((s) => ({ name: s.name })),
+        timestamp: new Date().toISOString(),
+      });
     }
 
     if (c.req.method === 'POST' && c.req.path === '/chat') {

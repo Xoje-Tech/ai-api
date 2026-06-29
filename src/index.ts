@@ -11,8 +11,9 @@ import {
   createOpenRouterService,
 } from './modules/ai-balancer/infrastructure/adapters/openrouter.adapter.js';
 import type { AIService } from './modules/ai-balancer/domain/ports/ai-service.port.js';
+import { logger } from './modules/shared/infrastructure/logger/logger.js';
 
-console.log('[startup] Checking environment variables...');
+logger.info('Checking environment variables...');
 
 const requiredEnvVars: Record<string, string | undefined> = {
   GROQ_API_KEY: process.env.GROQ_API_KEY,
@@ -22,36 +23,36 @@ const requiredEnvVars: Record<string, string | undefined> = {
 
 for (const [name, value] of Object.entries(requiredEnvVars)) {
   if (!value) {
-    console.warn(`[startup] ⚠ Missing env var: ${name}`);
+    logger.warn({ envVar: name }, 'missing env var');
   } else {
-    console.log(`[startup] ✓ ${name} is set`);
+    logger.info({ envVar: name }, 'env var set');
   }
 }
 
-console.log(`[startup] PORT=${process.env.PORT ?? '3000 (default)'}`);
+logger.info({ port: process.env.PORT ?? '3000' }, 'PORT configuration');
 
 const services: AIService[] = [];
 
 try {
   services.push(createGroqService(createGroqClient()));
-  console.log('[startup] ✓ Groq service loaded');
+  logger.info('Groq service loaded');
 } catch (err) {
-  console.error('[startup] ✗ Failed to load Groq service:', (err as Error).message);
+  logger.error({ err: (err as Error).message }, 'Failed to load Groq service');
 }
 
 try {
   services.push(createOpenRouterService(createOpenRouterClient()));
-  console.log('[startup] ✓ OpenRouter service loaded');
+  logger.info('OpenRouter service loaded');
 } catch (err) {
-  console.error('[startup] ✗ Failed to load OpenRouter service:', (err as Error).message);
+  logger.error({ err: (err as Error).message }, 'Failed to load OpenRouter service');
 }
 
 if (services.length === 0) {
-  console.error('[startup] ✗ No AI services available. Exiting.');
+  logger.fatal('No AI services available — exiting');
   process.exit(1);
 }
 
-console.log(`[startup] ${services.length} service(s) ready: ${services.map((s) => s.name).join(', ')}`);
+logger.info({ count: services.length, services: services.map((s) => s.name) }, 'services ready');
 
 const balancer = new CircuitBreakerBalancer(services, {
   failureThreshold: 3,
@@ -67,4 +68,4 @@ serve({
   fetch: app.fetch,
 });
 
-console.log(`Server is running on http://localhost:${port}`);
+logger.info({ url: `http://localhost:${port}` }, 'server running');

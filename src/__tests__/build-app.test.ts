@@ -42,11 +42,28 @@ describe('buildApp (legacy behaviour)', () => {
     expect(res.headers.get('access-control-allow-origin')).toBe('*');
   });
 
-  it('returns 404 for unknown routes', async () => {
+  it('responds 404 for unknown routes', async () => {
     const app = buildApp({ services: [] });
     const res = await app.request('/some/random/path');
 
     expect(res.status).toBe(404);
+  });
+
+  it('responds to GET /health with a service status report', async () => {
+    const groq = stubService('Groq', 'ok');
+    const openrouter = stubService('OpenRouter', 'ok');
+    const app = buildApp({ services: [groq, openrouter] });
+
+    const res = await app.request('/health');
+
+    expect(res.status).toBe(200);
+    expect(res.headers.get('content-type')).toContain('application/json');
+    const body = (await res.json()) as { status: string; services: { name: string }[]; timestamp: string };
+    expect(body.status).toBe('ok');
+    expect(body.services.map((s) => s.name)).toEqual(['Groq', 'OpenRouter']);
+    expect(typeof body.timestamp).toBe('string');
+    // ISO 8601 sanity check
+    expect(new Date(body.timestamp).toISOString()).toBe(body.timestamp);
   });
 
   it('streams the first service response on POST /chat', async () => {
