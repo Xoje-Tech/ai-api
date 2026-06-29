@@ -1,5 +1,5 @@
 import { getUsers, getUserById, insertUser, deleteUser } from '../db';
-import { jsonResponse } from '../utils/response';
+import { jsonResponse } from '@shared/infrastructure/http/response.js';
 
 export async function handleUsers(req: Request, url: URL, pathname: string): Promise<Response | null> {
   const idMatch = pathname.match(/^\/users\/(\d+)$/);

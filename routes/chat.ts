@@ -1,5 +1,5 @@
 import type { AIService, ChatMessage } from '../types';
-import { jsonResponse } from '../utils/response';
+import { jsonResponse } from '@shared/infrastructure/http/response.js';
 
 export function createChatHandler(getNextService: () => AIService) {
   return async function handleChat(req: Request): Promise<Response> {

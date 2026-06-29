@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import type { AIService } from '../types.js';
-import { corsResponse, htmlResponse } from '../utils/response.js';
-import { landingHTML } from '../views/landing.js';
+import { corsResponse, htmlResponse } from '@shared/infrastructure/http/response.js';
+import { landingHTML } from '@shared/interface/views/landing.js';
 import { handleUsers } from '../routes/users.js';
 import { createChatHandler } from '../routes/chat.js';
 
