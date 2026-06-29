@@ -33,14 +33,6 @@ try {
 }
 
 try {
-  const { cerebrasService } = await import('./services/cerebras');
-  services.push(cerebrasService);
-  console.log('[startup] ✓ Cerebras service loaded');
-} catch (err) {
-  console.error('[startup] ✗ Failed to load Cerebras service:', (err as Error).message);
-}
-
-try {
   const { openrouterService } = await import('./services/openrouter');
   services.push(openrouterService);
   console.log('[startup] ✓ OpenRouter service loaded');
