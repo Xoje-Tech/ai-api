@@ -1,4 +1,4 @@
-import type { AIService } from '../../domain/ports/ai-service.port.js';
+import type { AIService } from '@ai-balancer/domain/ports/ai-service.port.js';
 import type { Balancer } from './balancer.js';
 
 export class RoundRobinBalancer implements Balancer {

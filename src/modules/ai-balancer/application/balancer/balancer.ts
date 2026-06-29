@@ -1,4 +1,4 @@
-import type { AIService } from '../../domain/ports/ai-service.port.js';
+import type { AIService } from '@ai-balancer/domain/ports/ai-service.port.js';
 
 export interface Balancer {
   selectService(): AIService;

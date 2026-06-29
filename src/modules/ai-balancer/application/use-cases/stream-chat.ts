@@ -1,4 +1,4 @@
-import type { AIService, ChatMessage } from '../../domain/ports/ai-service.port.js';
+import type { AIService, ChatMessage } from '@ai-balancer/domain/ports/ai-service.port.js';
 
 export interface StreamChatDeps {
   balancer: {
