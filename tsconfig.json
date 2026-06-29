@@ -9,6 +9,13 @@
     "skipLibCheck": true,
     "noEmit": true,
     "allowJs": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@ai-balancer/*": ["src/modules/ai-balancer/*"],
+      "@users/*": ["src/modules/users/*"],
+      "@shared/*": ["src/modules/shared/*"]
+    }
   }
 }
