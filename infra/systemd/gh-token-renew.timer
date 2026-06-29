@@ -1,0 +1,10 @@
+[Unit]
+Description=Renew gh installation token every 50 minutes
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=50min
+AccuracySec=10s
+
+[Install]
+WantedBy=timers.target
