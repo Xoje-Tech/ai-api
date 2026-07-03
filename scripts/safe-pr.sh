@@ -44,5 +44,6 @@ if [[ -n "$LABEL" ]]; then
   LABEL_ARG="--label $LABEL"
 fi
 
-# Pass all arguments, add assignee (@me), reviewer (DevXoje), and dynamic label
-gh pr create "$@" --assignee "@me" --reviewer "DevXoje" $LABEL_ARG
+# Pass all arguments, add reviewer (DevXoje), and dynamic label.
+# Note: GitHub Apps cannot be assignees, so we skip --assignee "@me".
+gh pr create "$@" --reviewer "DevXoje" $LABEL_ARG
