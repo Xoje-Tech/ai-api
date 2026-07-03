@@ -13,19 +13,13 @@ import {
 import type { AIService } from './modules/ai-balancer/domain/ports/ai-service.port.js';
 import { logger } from './modules/shared/infrastructure/logger/logger.js';
 import { InMemoryUserRepository } from './modules/users/infrastructure/persistence/in-memory-user.repository.js';
-import {
-  PostgresUserRepository,
-  type PostgresSql,
-} from './modules/users/infrastructure/persistence/postgres-user.repository.js';
 import type { UserRepository } from './modules/users/domain/ports/user-repository.port.js';
-import postgres from 'postgres';
 
 logger.info('Checking environment variables...');
 
 const requiredEnvVars: Record<string, string | undefined> = {
   GROQ_API_KEY: process.env.GROQ_API_KEY,
   OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY,
-  DATABASE_URL: process.env.DATABASE_URL,
 };
 
 for (const [name, value] of Object.entries(requiredEnvVars)) {
@@ -67,29 +61,9 @@ logger.info(
   'services ready',
 );
 
-let userRepository: UserRepository;
-if (process.env.DATABASE_URL) {
-  // The real `postgres` package returns a `Sql<{}>` with many methods;
-  // our PostgresUserRepository only uses the tagged-template call.
-  // Cast is intentional and narrow, documented in postgres.repository.ts.
-  const sql = postgres(process.env.DATABASE_URL) as unknown as PostgresSql;
-  const pgRepo = new PostgresUserRepository(sql);
-  try {
-    await pgRepo.list(1);
-    logger.info('Postgres user repository ready');
-  } catch (err) {
-    logger.warn(
-      { err: (err as Error).message },
-      'Postgres reachable but query failed — falling back to in-memory',
-    );
-  }
-  userRepository = pgRepo;
-} else {
-  logger.warn(
-    'DATABASE_URL not set — using InMemoryUserRepository for /users CRUD',
-  );
-  userRepository = new InMemoryUserRepository();
-}
+// Per design §C1: PostgresUserRepository stays in the codebase but is
+// unreferenced in production wiring. Always use InMemoryUserRepository.
+const userRepository: UserRepository = new InMemoryUserRepository();
 
 const balancer = new CircuitBreakerBalancer(services, {
   failureThreshold: 3,
