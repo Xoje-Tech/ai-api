@@ -20,6 +20,14 @@ FROM node:26-slim AS runtime
 RUN apt-get update \
  && apt-get install -y --no-install-recommends wget ca-certificates \
  && rm -rf /var/lib/apt/lists/*
+# node:26-slim doesn't ship pnpm or corepack. The build stage used
+# `corepack enable` which only worked in node:26-bookworm; the runtime
+# stage needs pnpm on PATH for `CMD ["pnpm", "start"]`. Pin to the
+# `packageManager` version declared in ai-api/package.json
+# (pnpm@11.9.0, added in commit 0c5f5094) — this is the fallback
+# design.md §Risks called out explicitly ("corepack failure:
+# npm i -g pnpm@11.9.0").
+RUN npm install -g pnpm@11.9.0
 WORKDIR /app
 USER node
 ENV NODE_ENV=production PORT=3000 AI_API_HOST=127.0.0.1
