@@ -30,13 +30,10 @@ COPY --from=build --chown=node:node /app/scripts ./scripts
 COPY --from=build --chown=node:node /app/package.json ./
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
   CMD wget -qO- http://127.0.0.1:3000/health || exit 1
-# Invoke `node` directly with the tsx binary copied from the build stage.
-# Going through `pnpm start` (a) requires pnpm in runtime — node:26-slim
-# has neither pnpm nor corepack — and (b) trips Node 26's MODULE_NOT_FOUND
-# behavior when `pnpm` is used as a CMD argv[0] without an absolute path.
-# `tsx` is a devDependency in package.json ("tsx": "^4.7.1"), so `pnpm
-# install --frozen-lockfile` in the build stage already drops it into
-# ./node_modules/.bin/tsx. The package.json `"start"` script is just
-# `tsx src/index.ts`, so this CMD is functionally equivalent to
-# `pnpm start` but with one fewer runtime dependency.
-CMD ["node", "./node_modules/.bin/tsx", "src/index.ts"]</new_string>
+# Use `sh -c` to force the shell to resolve `pnpm` from $PATH before Node
+# sees it. Without `sh -c`, Node 26 attempts to load `pnpm` as a module
+# path (`/app/pnpm`) and aborts with MODULE_NOT_FOUND. The global `pnpm`
+# is installed earlier in this stage via `RUN npm install -g pnpm@11.9.0`,
+# so $PATH resolves it cleanly. The `pnpm start` script runs `tsx
+# src/index.ts` (per package.json).
+CMD ["sh", "-c", "pnpm start"]</new_string>
