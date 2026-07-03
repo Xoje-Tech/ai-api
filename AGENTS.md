@@ -26,7 +26,7 @@ pnpm test:run          # smoke check
 pnpm dev               # start dev server (tsx watch) on :3000
 ```
 
-Health check: `curl http://localhost:3000/api/health`
+Health check: `curl http://localhost:3000/health`
 
 ---
 
@@ -118,7 +118,7 @@ Each provider (Groq/OpenRouter) is an adapter implementing the same port interfa
 - **Round-robin SSE** — balancer rotates between active providers per request
 - **Graceful failover** — on provider error, retries with next adapter before returning 5xx
 - **Database optional at boot** — startup logs warning if `DATABASE_URL` missing, but server still serves traffic
-- **Health endpoint** — `GET /api/health` reports liveness + per-adapter status
+- **Health endpoint** — `GET /health` reports liveness + per-adapter status
 
 ---
 
