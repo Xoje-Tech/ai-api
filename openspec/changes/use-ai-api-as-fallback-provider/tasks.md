@@ -19,7 +19,7 @@ Chain strategy: pending
 ## Phase 1: Tests First (RED)
 
 - [x] 1.1 Create `src/__tests__/auth-middleware.test.ts` — 6 cases: `/health`→200, `OPTIONS`→2xx, POST no Bearer→401 envelope, wrong Bearer→401, correct Bearer→2xx, body lacks `AI_API_KEY` value. Watch RED.
-- [x] 1.2 Create `src/modules/ai-balancer/interface/routes/openai-chat.route.test.ts` — 4 cases: JSON echoes client `model`; SSE ends `data: [DONE]\n\n`; empty/65 messages→400 `invalid_request_error`. Watch RED on #1.
+- [x] 1.2 Create `src/modules/ai-balancer/interface/routes/openai-chat.route.test.ts` — 5 cases: JSON echoes client `model`; SSE ends `data: [DONE]\n\n`; empty/65 messages→400 `invalid_request_error`; `tools`/`functions`/`tool_choice` silently dropped. Watch RED on #1.
 
 ## Phase 2: Auth middleware + app wiring (GREEN)
 
@@ -31,7 +31,7 @@ Chain strategy: pending
 ## Phase 3: OpenAI route fix (GREEN)
 
 - [x] 3.1 Modify `src/modules/ai-balancer/interface/routes/openai-chat.route.ts` ~L83: replace hardcoded `'openrouter/free'` with `parsed.data.model`. +5/−1 LOC.
-- [x] 3.2 Route tests 4/4 pass; total 80+.
+- [x] 3.2 Route tests 5/5 pass; total 83+.
 
 ## Phase 4: Bind + startup hardening (GREEN)
 

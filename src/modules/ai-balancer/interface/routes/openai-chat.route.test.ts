@@ -123,4 +123,30 @@ describe('openai-route-contract: POST /v1/chat/completions', () => {
     const body = (await res.json()) as { error: { type: string } };
     expect(body.error.type).toBe('invalid_request_error');
   });
+
+  // Spec: openai-route-contract §"Chat-Only Surface" → "Tools silently dropped".
+  // Locks Zod's default-strip-unknown-keys behavior so future schema edits
+  // (e.g. someone adds `.strict()`) surface as a failing test.
+  it('5. tools/functions/tool_choice are silently dropped (no 400)', async () => {
+    const balancer = stubBalancer([groq]);
+    const req = new Request('http://test/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        model: 'llama-3.1-8b',
+        messages: [{ role: 'user', content: 'hi' }],
+        tools: [{ type: 'function', function: { name: 'foo' } }],
+        functions: [{ name: 'bar' }],
+        tool_choice: 'auto',
+      }),
+    });
+    const res = await handleOpenAIChat(req, balancer);
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as {
+      object: string;
+      model: string;
+    };
+    expect(body.object).toBe('chat.completion');
+    expect(body.model).toBe('llama-3.1-8b');
+  });
 });

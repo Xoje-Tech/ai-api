@@ -77,7 +77,16 @@ export function requireBearer(opts: BearerAuthOptions) {
 Insert immediately after `const app = new Hono();`:
 
 ```ts
-app.use('*', requireBearer({ envKeyName: 'AI_API_KEY', exemptPathPrefixes: ['/health'] }));
+app.use(
+  '*',
+  requireBearer({
+    envKeyName: 'AI_API_KEY',
+    // Non-OpenAI surface stays unauthenticated. /v1/* routes ARE auth-gated
+    // (paths not in this list, including /v1/chat/completions and /v1/models,
+    // DO require Bearer). /health is also exempt per v1-auth spec.
+    exemptPathPrefixes: ['/health', '/', '/users', '/chat'],
+  }),
+);
 ```
 
 ### `src/index.ts` (modify, +18 / −24 LOC)
