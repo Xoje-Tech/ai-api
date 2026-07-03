@@ -1,10 +1,10 @@
 ---
 type: API Surface
 title: HTTP Endpoints
-description: Auto-regenerated list of HTTP endpoints (9 entries across 4 module(s)).
+description: Auto-regenerated list of HTTP endpoints (9 entries across 5 module(s)).
 resource: src/app.ts
 tags: [api, http, endpoints]
-timestamp: 2026-06-29T21:14:55Z
+timestamp: 2026-07-03T06:53:09Z
 ---
 # HTTP Endpoints
 
@@ -19,6 +19,11 @@ timestamp: 2026-06-29T21:14:55Z
 | POST | /v1/chat/completions | `src/app.ts` |
 | * | /users | `src/app.ts` |
 | OPTIONS | / | `src/app.ts` |
+
+## Module: ai-balancer
+
+| Method | Path | Source |
+|--------|------|--------|
 
 ## Module: ai-balancer
 

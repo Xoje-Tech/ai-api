@@ -4,7 +4,7 @@ title: OpenRouter
 description: Adapter wrapping @openrouter/sdk for chat completions with streaming SSE support.
 resource: src/modules/ai-balancer/infrastructure/adapters/openrouter.adapter.ts
 tags: [adapter, openrouter, ai-balancer, streaming]
-timestamp: 2026-06-29T21:14:55Z
+timestamp: 2026-07-03T06:53:09Z
 ---
 # OpenRouter Adapter
 

@@ -4,7 +4,7 @@ title: Groq
 description: Adapter wrapping groq-sdk for chat completions with streaming SSE support.
 resource: src/modules/ai-balancer/infrastructure/adapters/groq.adapter.ts
 tags: [adapter, groq, ai-balancer, streaming]
-timestamp: 2026-06-29T21:14:55Z
+timestamp: 2026-07-03T06:53:09Z
 ---
 # Groq Adapter
 
