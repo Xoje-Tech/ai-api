@@ -1,6 +1,11 @@
 # syntax=docker/dockerfile:1.7
 FROM node:26-bookworm AS build
 WORKDIR /app
+# pnpm 10+ respects CI=true to suppress interactive prompts (e.g. the
+# ERR_PNPM_ABORTED_REMOVE_MODULES_DIR_NO_TTY abort that hits a non-TTY
+# build). Without this, `pnpm typecheck` aborts because pnpm wants to
+# ask whether to purge stale modules from the install step.
+ENV CI=true
 RUN npm install -g corepack@latest && corepack enable
 # pnpm 10+ ignores build scripts unless `onlyBuiltDependencies` is visible.
 # pnpm-workspace.yaml carries that config in this repo, so it must be in
