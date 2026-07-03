@@ -29,5 +29,20 @@ echo "✅========================================================✅"
 echo "   LOCAL CI PASSED. Proceeding to create Pull Request..."
 echo "✅========================================================✅"
 
-# Pass all arguments passed to this script directly to 'gh pr create'
-gh pr create "$@"
+# Auto-detect label from branch name (e.g., feat/xyz -> type:feature)
+BRANCH_NAME=$(git branch --show-current)
+LABEL=""
+if [[ "$BRANCH_NAME" == feat/* ]]; then LABEL="type:feature"; fi
+if [[ "$BRANCH_NAME" == fix/* ]]; then LABEL="type:bug"; fi
+if [[ "$BRANCH_NAME" == chore/* || "$BRANCH_NAME" == ci/* || "$BRANCH_NAME" == test/* ]]; then LABEL="type:chore"; fi
+if [[ "$BRANCH_NAME" == docs/* ]]; then LABEL="type:docs"; fi
+if [[ "$BRANCH_NAME" == refactor/* ]]; then LABEL="type:refactor"; fi
+
+LABEL_ARG=""
+if [[ -n "$LABEL" ]]; then
+  echo "🏷️  Auto-detected label: $LABEL"
+  LABEL_ARG="--label $LABEL"
+fi
+
+# Pass all arguments, add assignee (@me), reviewer (DevXoje), and dynamic label
+gh pr create "$@" --assignee "@me" --reviewer "DevXoje" $LABEL_ARG
