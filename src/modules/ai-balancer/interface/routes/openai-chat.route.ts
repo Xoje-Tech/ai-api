@@ -76,25 +76,32 @@ function chunkEvent(
  *
  * Supports both streaming (SSE) and non-streaming JSON responses.
  * Uses the same injected Balancer as the internal /chat endpoint.
+ * The `model` field in the response is read from the parsed request
+ * (with a fallback to 'openrouter/free' when the client omits it) —
+ * see openai-route-contract §Non-Streaming Response Shape.
  */
 export async function handleOpenAIChat(
   req: Request,
   balancer: Balancer,
-  model = 'openrouter/free',
 ): Promise<Response> {
   let body: unknown;
   try {
     body = await req.json();
   } catch {
-    return openaiJsonError(400, 'invalid_request', 'Invalid JSON body');
+    return openaiJsonError(400, 'invalid_request_error', 'Invalid JSON body');
   }
 
   const parsed = OpenAIChatRequestSchema.safeParse(body);
   if (!parsed.success) {
-    return openaiJsonError(400, 'invalid_request', parsed.error.issues[0]?.message ?? 'Invalid request');
+    return openaiJsonError(400, 'invalid_request_error', parsed.error.issues[0]?.message ?? 'Invalid request');
   }
 
-  const { messages, stream } = parsed.data;
+  // Echo the client-supplied model when present; otherwise fall back to the
+  // signature default. Spec: openai-route-contract "Non-Streaming Response
+  // Shape" — `model` MUST echo the client value (or fall back to a known
+  // string when omitted).
+  const { messages, stream, model: clientModel } = parsed.data;
+  const model = clientModel ?? 'openrouter/free';
   const chatMessages: ChatMessage[] = messages.map(toChatMessage);
   const created = Math.floor(Date.now() / 1000);
 
