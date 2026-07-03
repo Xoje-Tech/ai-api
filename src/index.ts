@@ -99,10 +99,25 @@ const balancer = new CircuitBreakerBalancer(services, {
 const app = buildApp({ services, balancer, userRepository });
 const port = Number(process.env.PORT ?? 3000);
 
+// Per api-runtime spec: loopback-by-default. Non-loopback bind requires
+// AI_API_ALLOW_PUBLIC=true (explicit operator override).
+const host = process.env.AI_API_HOST ?? '127.0.0.1';
+if (
+  host !== '127.0.0.1' &&
+  host !== '::1' &&
+  process.env.AI_API_ALLOW_PUBLIC !== 'true'
+) {
+  logger.fatal(
+    { host },
+    'AI_API_HOST points at a non-loopback address — set AI_API_ALLOW_PUBLIC=true to override',
+  );
+  process.exit(1);
+}
+
 serve({
   port,
-  hostname: '0.0.0.0',
+  hostname: host,
   fetch: app.fetch,
 });
 
-logger.info({ url: `http://localhost:${port}` }, 'server running');
+logger.info({ url: `http://${host}:${port}` }, 'server running');
