@@ -52,7 +52,7 @@ Configured in `.env` (see `.env.example`):
 
 | Variable | Required | Notes |
 |----------|----------|-------|
-| `DATABASE_URL` | yes (for users/) | `postgresql://user:pass@host:5432/db` |
+
 | `GROQ_API_KEY` | yes (for Groq adapter) | Free tier at console.groq.com |
 | `OPENROUTER_API_KEY` | yes (for OpenRouter adapter) | Free tier at openrouter.ai |
 | `PORT` | no | Default 3000 |
@@ -120,7 +120,6 @@ Each provider (Groq/OpenRouter) is an adapter implementing the same port interfa
 
 - **Round-robin SSE** — balancer rotates between active providers per request
 - **Graceful failover** — on provider error, retries with next adapter before returning 5xx
-- **Database optional at boot** — startup logs warning if `DATABASE_URL` missing, but server still serves traffic
 - **Health endpoint** — `GET /health` reports liveness + per-adapter status
 
 ---
@@ -139,6 +138,8 @@ This project lives in the `software-dev` Hermes profile. For substantial changes
 Do not skip phases. Strict TDD mode is active (write test first, watch it fail, write code, watch it pass).
 
 ### Pull Request Protocol (MANDATORY)
+**BOTH `master` and `develop` ARE BRANCH-PROTECTED.** Direct pushes will be rejected by GitHub rules (`GH013: Repository rule violations`). All changes MUST flow through feature branches and Pull Requests.
+
 **NEVER** use `gh pr create` directly. You **MUST** use the safe wrapper to validate the CI pipeline locally before touching the network.
 ```bash
 pnpm run pr:create -- --base develop --title "..." --body "..."
@@ -149,12 +150,11 @@ If the command fails, it means `act` caught a CI failure. Fix the code and try a
 
 ## Known Debt (as of 2026-06-29)
 
-- **No `docker-compose.yml`** — Postgres setup is host-local
-- **`users/` module** — PostgresUserRepository recently wired in entrypoint (commit `3096e82`); migrations TBD
-
+- **No `docker-compose.yml`** — Setup is host-local
 ---
 
 ## Knowledge Bundle (OKF)
+
 
 The project ships an [Open Knowledge Format](https://cloud.google.com/blog/products/data-analytics/how-the-open-knowledge-format-can-improve-data-sharing) bundle at `.knowledge/`. Every markdown file in there is a concept page with YAML frontmatter (OKF v0.1 spec: `type` required, `title`/`description`/`resource`/`tags`/`timestamp` optional).
 
@@ -187,4 +187,4 @@ The project ships an [Open Knowledge Format](https://cloud.google.com/blog/produ
 
 ---
 
-*Last updated: 2026-06-29*
+*Last updated: 2026-07-03*

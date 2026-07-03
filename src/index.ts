@@ -12,8 +12,6 @@ import {
 } from './modules/ai-balancer/infrastructure/adapters/openrouter.adapter.js';
 import type { AIService } from './modules/ai-balancer/domain/ports/ai-service.port.js';
 import { logger } from './modules/shared/infrastructure/logger/logger.js';
-import { InMemoryUserRepository } from './modules/users/infrastructure/persistence/in-memory-user.repository.js';
-import type { UserRepository } from './modules/users/domain/ports/user-repository.port.js';
 
 logger.info('Checking environment variables...');
 
@@ -69,16 +67,12 @@ logger.info(
   'services ready',
 );
 
-// Per design §C1: PostgresUserRepository stays in the codebase but is
-// unreferenced in production wiring. Always use InMemoryUserRepository.
-const userRepository: UserRepository = new InMemoryUserRepository();
-
 const balancer = new CircuitBreakerBalancer(services, {
   failureThreshold: 3,
   cooldownMs: 30 * 1000,
 });
 
-const app = buildApp({ services, balancer, userRepository });
+const app = buildApp({ services, balancer });
 const port = Number(process.env.PORT ?? 3000);
 
 // Per api-runtime spec: loopback-by-default. Non-loopback bind requires

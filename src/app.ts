@@ -4,11 +4,7 @@ import { RoundRobinBalancer } from './modules/ai-balancer/application/balancer/r
 import type { Balancer } from './modules/ai-balancer/application/balancer/balancer.js';
 import { handleChat } from './modules/ai-balancer/interface/routes/chat.route.js';
 import { handleOpenAIChat } from './modules/ai-balancer/interface/routes/openai-chat.route.js';
-import { handleUsers } from './modules/users/interface/routes/users.route.js';
-import type { UserRepository } from './modules/users/domain/ports/user-repository.port.js';
-import { InMemoryUserRepository } from './modules/users/infrastructure/persistence/in-memory-user.repository.js';
-import { corsResponse, htmlResponse, jsonResponse } from './modules/shared/infrastructure/http/response.js';
-import { landingHTML } from './modules/shared/interface/views/landing.js';
+import { corsResponse, jsonResponse } from './modules/shared/infrastructure/http/response.js';
 import { requireBearer } from './modules/shared/interface/middleware/auth.js';
 
 export interface BuildAppOptions {
@@ -21,48 +17,34 @@ export interface BuildAppOptions {
    * application/balancer/circuit-breaker-balancer.ts.
    */
   balancer?: Balancer;
-  /**
-   * Optional UserRepository. Defaults to InMemoryUserRepository so the
-   * /users CRUD is exercisable without Postgres. Production wiring
-   * passes a PostgresUserRepository.
-   */
-  userRepository?: UserRepository;
 }
 
 /**
  * buildApp returns a Hono instance configured with all routes.
  *
  * - /chat uses the streamChat use-case with an injected Balancer.
- * - /users uses the hexagonal users module with an injected repo.
  * - /health reports the loaded services.
  */
 export function buildApp(options: BuildAppOptions): Hono {
-  const { services, balancer: providedBalancer, userRepository } = options;
+  const { services, balancer: providedBalancer } = options;
   const balancer: Balancer = providedBalancer ?? new RoundRobinBalancer(services);
-  const userRepo: UserRepository = userRepository ?? new InMemoryUserRepository();
   const app = new Hono();
 
   // Auth applies only to /v1/* (per v1-auth spec). Everything else
-  // — landing, /health, legacy /chat, /users/* — remains unauthenticated
+  // — /health, legacy /chat — remains unauthenticated
   // because those are not the OpenAI surface (design.md §"API Surface
   // — Unchanged"). `/health` is also explicitly exempt per spec.
   app.use(
     '*',
     requireBearer({
       envKeyName: 'AI_API_KEY',
-      exemptPathPrefixes: ['/health', '/', '/users', '/chat'],
+      exemptPathPrefixes: ['/health', '/chat'],
     }),
   );
 
   app.all('*', async (c) => {
     if (c.req.method === 'OPTIONS') {
       return corsResponse();
-    }
-
-    const url = new URL(c.req.url);
-
-    if (c.req.method === 'GET' && c.req.path === '/') {
-      return htmlResponse(landingHTML(url.origin));
     }
 
     if (c.req.method === 'GET' && c.req.path === '/health') {
@@ -92,11 +74,6 @@ export function buildApp(options: BuildAppOptions): Hono {
 
     if (c.req.method === 'POST' && c.req.path === '/v1/chat/completions') {
       return handleOpenAIChat(c.req.raw, balancer);
-    }
-
-    if (c.req.path.startsWith('/users')) {
-      const response = await handleUsers(c.req.raw, url, c.req.path, userRepo);
-      if (response) return response;
     }
 
     return new Response('Not found', { status: 404 });
