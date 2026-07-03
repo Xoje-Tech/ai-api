@@ -35,11 +35,11 @@ Chain strategy: pending
 
 ## Phase 4: Bind + startup hardening (GREEN)
 
-- [ ] 4.1 Modify `src/index.ts`: read `AI_API_HOST` (default `127.0.0.1`); pass to `serve({ hostname })` instead of hardcoded `0.0.0.0`.
-- [ ] 4.2 Modify `src/index.ts`: drop `DATABASE_URL` branch; always wire `InMemoryUserRepository`.
-- [ ] 4.3 Modify `src/index.ts`: throw on boot when `AI_API_KEY` unset (clear message).
-- [ ] 4.4 Modify `.env.example`: add `AI_API_KEY=` + `AI_API_HOST=127.0.0.1`; remove `DATABASE_URL`; keep GROQ, OPENROUTER, PORT, NODE_ENV, LOG_LEVEL.
-- [ ] 4.5 `pnpm test:run` — zero regressions.
+- [x] 4.1 Modify `src/index.ts`: read `AI_API_HOST` (default `127.0.0.1`); pass to `serve({ hostname })` instead of hardcoded `0.0.0.0`.
+- [x] 4.2 Modify `src/index.ts`: drop `DATABASE_URL` branch; always wire `InMemoryUserRepository`.
+- [x] 4.3 Modify `src/index.ts`: throw on boot when `AI_API_KEY` unset (clear message).
+- [x] 4.4 Modify `.env.example`: add `AI_API_KEY=` + `AI_API_HOST=127.0.0.1`; remove `DATABASE_URL`; keep GROQ, OPENROUTER, PORT, NODE_ENV, LOG_LEVEL.
+- [x] 4.5 `pnpm test:run` — zero regressions.
 
 ## Phase 5: Dockerfile + compose + dockerignore (GREEN)
 
