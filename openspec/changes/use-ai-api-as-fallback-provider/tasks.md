@@ -43,10 +43,10 @@ Chain strategy: pending
 
 ## Phase 5: Dockerfile + compose + dockerignore (GREEN)
 
-- [ ] 5.1 Create `Dockerfile` (multi-stage: builder `node:26`+`pnpm@11.9`; runtime `node:26-slim` non-root+`wget`; HEALTHCHECK wget `/health`; CMD `["pnpm","start"]`). ~30 LOC.
-- [ ] 5.2 Create `.dockerignore` — exclude `node_modules`,`.git`,`.atl`,`openspec`,`.env*`,`dist`,`.knowledge/log.md`,`src/**/__tests__/`. ~22 LOC.
-- [ ] 5.3 Create `docker-compose.yml` — svc `ai-api`, `127.0.0.1:3000:3000`, `env_file:.env`, `restart:unless-stopped`, healthcheck wget. ~20 LOC.
-- [ ] 5.4 Modify `AGENTS.md` Quick Start: replace `pnpm dev` with `docker compose up -d`.
+- [x] 5.1 Create `Dockerfile` (multi-stage: builder `node:26`+`pnpm@11.9`; runtime `node:26-slim` non-root+`wget`; HEALTHCHECK wget `/health`; CMD `["pnpm","start"]`). ~30 LOC.
+- [x] 5.2 Create `.dockerignore` — exclude `node_modules`,`.git`,`.atl`,`openspec`,`.env*`,`dist`,`.knowledge/log.md`,`src/**/__tests__/`. ~22 LOC.
+- [x] 5.3 Create `docker-compose.yml` — svc `ai-api`, `127.0.0.1:3000:3000`, `env_file:.env`, `restart:unless-stopped`, healthcheck wget. ~20 LOC.
+- [x] 5.4 Modify `AGENTS.md` Quick Start: replace `pnpm dev` with `docker compose up -d`.
 
 ## Phase 6: Smoke verification (manual)
 
@@ -58,8 +58,8 @@ Chain strategy: pending
 
 ## Phase 7: Memory + commit
 
-- [ ] 7.1 `pnpm knowledge:regen` — refresh `.knowledge/api/endpoints.md` + `.knowledge/env/variables.md`.
-- [ ] 7.2 `pnpm knowledge:lint` — OKF OK, exit 0.
+- [x] 7.1 `pnpm knowledge:regen` — refresh `.knowledge/api/endpoints.md` + `.knowledge/env/variables.md`.
+- [x] 7.2 `pnpm knowledge:lint` — OKF OK, exit 0.
 - [ ] 7.3 `git commit -m "feat(ai-api): graduate to fallback provider: bearer auth + loopback bind + docker compose"` (no Co-Authored-By).
 - [ ] 7.4 `git push origin master` (if gh auth OK).
 
