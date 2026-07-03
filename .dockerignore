@@ -1,0 +1,7 @@
+node_modules/ coverage/ *.tsbuildinfo
+.git/ .gitignore/ .gitattributes/
+.knowledge/ openspec/
+.env .env.local .env.*.local
+Dockerfile docker-compose.yml .dockerignore
+.vscode/ .idea/ .DS_Store *.swp
+src/**/*.test.ts tests/ **/*.test.ts
