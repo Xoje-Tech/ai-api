@@ -43,14 +43,22 @@ describe('buildApp (legacy behaviour)', () => {
     else process.env.AI_API_KEY = prevKey;
   });
 
-  it('serves the landing page at GET /', async () => {
+  it('responds 404 for GET /', async () => {
     const app = buildApp({ services: [] });
-    const res = await app.request('/');
+    const res = await app.request('/', {
+      headers: { authorization: `Bearer ${TEST_BEARER}` },
+    });
 
-    expect(res.status).toBe(200);
-    expect(res.headers.get('content-type')).toContain('text/html');
-    const text = await res.text();
-    expect(text).toContain('Bun AI API');
+    expect(res.status).toBe(404);
+  });
+
+  it('responds 404 for GET /users', async () => {
+    const app = buildApp({ services: [] });
+    const res = await app.request('/users', {
+      headers: { authorization: `Bearer ${TEST_BEARER}` },
+    });
+
+    expect(res.status).toBe(404);
   });
 
   it('returns CORS headers on OPTIONS preflight', async () => {

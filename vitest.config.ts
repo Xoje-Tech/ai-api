@@ -13,7 +13,6 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, 'src'),
       '@ai-balancer': path.resolve(__dirname, 'src/modules/ai-balancer'),
-      '@users': path.resolve(__dirname, 'src/modules/users'),
       '@shared': path.resolve(__dirname, 'src/modules/shared'),
     },
   },
