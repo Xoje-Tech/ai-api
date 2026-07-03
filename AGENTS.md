@@ -138,6 +138,13 @@ This project lives in the `software-dev` Hermes profile. For substantial changes
 
 Do not skip phases. Strict TDD mode is active (write test first, watch it fail, write code, watch it pass).
 
+### Pull Request Protocol (MANDATORY)
+**NEVER** use `gh pr create` directly. You **MUST** use the safe wrapper to validate the CI pipeline locally before touching the network.
+```bash
+pnpm run pr:create -- --base develop --title "..." --body "..."
+```
+If the command fails, it means `act` caught a CI failure. Fix the code and try again. Do not bypass this rule.
+
 ---
 
 ## Known Debt (as of 2026-06-29)
