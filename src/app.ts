@@ -7,9 +7,9 @@ import { handleOpenAIChat } from './modules/ai-balancer/interface/routes/openai-
 import { handleUsers } from './modules/users/interface/routes/users.route.js';
 import type { UserRepository } from './modules/users/domain/ports/user-repository.port.js';
 import { InMemoryUserRepository } from './modules/users/infrastructure/persistence/in-memory-user.repository.js';
-import { corsResponse, htmlResponse, jsonResponse } from '@shared/infrastructure/http/response.js';
-import { landingHTML } from '@shared/interface/views/landing.js';
-import { requireBearer } from '@shared/interface/middleware/auth.js';
+import { corsResponse, htmlResponse, jsonResponse } from './modules/shared/infrastructure/http/response.js';
+import { landingHTML } from './modules/shared/interface/views/landing.js';
+import { requireBearer } from './modules/shared/interface/middleware/auth.js';
 
 export interface BuildAppOptions {
   services: AIService[];

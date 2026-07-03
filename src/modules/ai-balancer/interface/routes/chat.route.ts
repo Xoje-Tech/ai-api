@@ -1,8 +1,8 @@
 import type { Balancer } from '../../application/balancer/balancer.js';
 import { streamChat } from '../../application/use-cases/stream-chat.js';
 import type { ChatMessage } from '../../domain/ports/ai-service.port.js';
-import { jsonResponse } from '@shared/infrastructure/http/response.js';
-import { logger } from '@shared/infrastructure/logger/logger.js';
+import { jsonResponse } from '../../../shared/infrastructure/http/response.js';
+import { logger } from '../../../shared/infrastructure/logger/logger.js';
 import { ChatRequestSchema } from '../dto/chat-request.dto.js';
 
 /**

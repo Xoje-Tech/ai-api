@@ -1,7 +1,7 @@
 import type { UserRepository } from '../../domain/ports/user-repository.port.js';
 import { DuplicateEmailError } from '../../domain/ports/user-repository.port.js';
-import { jsonResponse } from '@shared/infrastructure/http/response.js';
-import { logger } from '@shared/infrastructure/logger/logger.js';
+import { jsonResponse } from '../../../shared/infrastructure/http/response.js';
+import { logger } from '../../../shared/infrastructure/logger/logger.js';
 import { listUsers } from '../../application/use-cases/list-users.js';
 import { getUser } from '../../application/use-cases/get-user.js';
 import { createUser } from '../../application/use-cases/create-user.js';

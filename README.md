@@ -17,24 +17,42 @@ input validation, structured logging, and a health endpoint.
 
 ## Quick start
 
+### Local Development
+
+1. **Install dependencies:**
+   ```bash
+   pnpm install
+   ```
+
+2. **Configure environment:**
+   Copy the example file and fill in your keys:
+   ```bash
+   cp .env.example .env
+   ```
+   *Note: You will need at least one AI provider key (`GROQ_API_KEY` or `OPENROUTER_API_KEY`) and a secure `AI_API_KEY` for authentication.*
+
+3. **Start the server:**
+   ```bash
+   pnpm dev     # tsx watch src/index.ts
+   ```
+
+The server boots on `http://127.0.0.1:3000` (override with `PORT`).
+
+### Production via Docker
+
+A `Dockerfile` and `docker-compose.yml` are provided for production deployments. The Docker build creates a lightweight Node 26 runtime image and isolates the build steps.
+
 ```bash
-pnpm install
-pnpm dev     # tsx watch src/index.ts
+# Ensure your .env file is populated first
+docker compose up -d --build
 ```
 
-The server reads API keys from `process.env`. In the Hermes ecosystem,
-these are managed by **Bitwarden Secrets Manager** (BWS) — see
-[Deployment](#deployment). For standalone development, you can export
-them directly:
+**Security Note (Host Binding & Auth):**
+By design (defense in depth), the application binds only to `127.0.0.1` inside the container. To make it accessible from the host via Docker Compose, the `docker-compose.yml` explicitly sets:
+- `AI_API_HOST=0.0.0.0`
+- `AI_API_ALLOW_PUBLIC="true"` (Required to override the loopback-only safety check).
 
-```bash
-export GROQ_API_KEY=***       # free at https://console.groq.com
-export OPENROUTER_API_KEY=*** # free at https://openrouter.ai
-export DATABASE_URL=...        # optional, only for /users CRUD
-pnpm dev
-```
-
-The server boots on `http://localhost:3000` (override with `PORT`).
+Additionally, all `/v1/*` routes (like `/v1/chat/completions`) require an `Authorization: Bearer <AI_API_KEY>` header. If `AI_API_KEY` is missing at boot, the server will exit.
 
 ## Endpoints
 

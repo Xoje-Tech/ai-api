@@ -22,18 +22,14 @@ RUN apt-get update \
  && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 USER node
-ENV NODE_ENV=production PORT=3000 AI_API_HOST=127.0.0.1
+ENV NODE_ENV=production PORT=3000 AI_API_HOST=0.0.0.0
 EXPOSE 3000
 COPY --from=build --chown=node:node /app/node_modules ./node_modules
 COPY --from=build --chown=node:node /app/src ./src
 COPY --from=build --chown=node:node /app/scripts ./scripts
 COPY --from=build --chown=node:node /app/package.json ./
+COPY --from=build --chown=node:node /app/tsconfig.json ./
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
   CMD wget -qO- http://127.0.0.1:3000/health || exit 1
-# Use `sh -c` to force the shell to resolve `pnpm` from $PATH before Node
-# sees it. Without `sh -c`, Node 26 attempts to load `pnpm` as a module
-# path (`/app/pnpm`) and aborts with MODULE_NOT_FOUND. The global `pnpm`
-# is installed earlier in this stage via `RUN npm install -g pnpm@11.9.0`,
-# so $PATH resolves it cleanly. The `pnpm start` script runs `tsx
-# src/index.ts` (per package.json).
-CMD ["sh", "-c", "pnpm start"]</new_string>
+# The app runs via tsx in production mode.
+CMD ["npx", "tsx", "src/index.ts"]
