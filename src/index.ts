@@ -56,6 +56,14 @@ if (services.length === 0) {
   process.exit(1);
 }
 
+if (!process.env.AI_API_KEY) {
+  logger.fatal(
+    { envVar: 'AI_API_KEY' },
+    'AI_API_KEY is required to serve /v1/* routes — exiting',
+  );
+  process.exit(1);
+}
+
 logger.info(
   { count: services.length, services: services.map((s) => s.name) },
   'services ready',
