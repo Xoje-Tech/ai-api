@@ -9,6 +9,7 @@ import type { UserRepository } from './modules/users/domain/ports/user-repositor
 import { InMemoryUserRepository } from './modules/users/infrastructure/persistence/in-memory-user.repository.js';
 import { corsResponse, htmlResponse, jsonResponse } from '@shared/infrastructure/http/response.js';
 import { landingHTML } from '@shared/interface/views/landing.js';
+import { requireBearer } from '@shared/interface/middleware/auth.js';
 
 export interface BuildAppOptions {
   services: AIService[];
@@ -40,6 +41,18 @@ export function buildApp(options: BuildAppOptions): Hono {
   const balancer: Balancer = providedBalancer ?? new RoundRobinBalancer(services);
   const userRepo: UserRepository = userRepository ?? new InMemoryUserRepository();
   const app = new Hono();
+
+  // Auth applies only to /v1/* (per v1-auth spec). Everything else
+  // — landing, /health, legacy /chat, /users/* — remains unauthenticated
+  // because those are not the OpenAI surface (design.md §"API Surface
+  // — Unchanged"). `/health` is also explicitly exempt per spec.
+  app.use(
+    '*',
+    requireBearer({
+      envKeyName: 'AI_API_KEY',
+      exemptPathPrefixes: ['/health', '/', '/users', '/chat'],
+    }),
+  );
 
   app.all('*', async (c) => {
     if (c.req.method === 'OPTIONS') {

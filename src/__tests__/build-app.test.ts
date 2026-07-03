@@ -1,6 +1,14 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { buildApp } from '../app.js';
 import type { AIService } from '../modules/ai-balancer/domain/ports/ai-service.port.js';
+
+// AI_API_KEY is required by the auth middleware once installed in
+// src/app.ts. Legacy build-app tests don't exercise /v1/* (they hit
+// /, /health, /chat, unknown paths), so their requests never reach
+// the middleware's Bearer check after the refactor — except for the
+// "unknown routes" test which now needs a Bearer to reach the
+// dispatcher and return 404 (vs. 401).
+const TEST_BEARER = 'test-key-1234567890abcdef';
 
 const stubService = (name: string, content: string): AIService => ({
   name,
@@ -25,6 +33,16 @@ async function readStreamBody(res: Response): Promise<string> {
 }
 
 describe('buildApp (legacy behaviour)', () => {
+  let prevKey: string | undefined;
+  beforeEach(() => {
+    prevKey = process.env.AI_API_KEY;
+    process.env.AI_API_KEY = TEST_BEARER;
+  });
+  afterEach(() => {
+    if (prevKey === undefined) delete process.env.AI_API_KEY;
+    else process.env.AI_API_KEY = prevKey;
+  });
+
   it('serves the landing page at GET /', async () => {
     const app = buildApp({ services: [] });
     const res = await app.request('/');
@@ -44,7 +62,9 @@ describe('buildApp (legacy behaviour)', () => {
 
   it('responds 404 for unknown routes', async () => {
     const app = buildApp({ services: [] });
-    const res = await app.request('/some/random/path');
+    const res = await app.request('/some/random/path', {
+      headers: { authorization: `Bearer ${TEST_BEARER}` },
+    });
 
     expect(res.status).toBe(404);
   });
