@@ -18,20 +18,20 @@ Chain strategy: pending
 
 ## Phase 1: Tests First (RED)
 
-- [ ] 1.1 Create `src/__tests__/auth-middleware.test.ts` — 6 cases: `/health`→200, `OPTIONS`→2xx, POST no Bearer→401 envelope, wrong Bearer→401, correct Bearer→2xx, body lacks `AI_API_KEY` value. Watch RED.
-- [ ] 1.2 Create `src/modules/ai-balancer/interface/routes/openai-chat.route.test.ts` — 4 cases: JSON echoes client `model`; SSE ends `data: [DONE]\n\n`; empty/65 messages→400 `invalid_request_error`. Watch RED on #1.
+- [x] 1.1 Create `src/__tests__/auth-middleware.test.ts` — 6 cases: `/health`→200, `OPTIONS`→2xx, POST no Bearer→401 envelope, wrong Bearer→401, correct Bearer→2xx, body lacks `AI_API_KEY` value. Watch RED.
+- [x] 1.2 Create `src/modules/ai-balancer/interface/routes/openai-chat.route.test.ts` — 4 cases: JSON echoes client `model`; SSE ends `data: [DONE]\n\n`; empty/65 messages→400 `invalid_request_error`. Watch RED on #1.
 
 ## Phase 2: Auth middleware + app wiring (GREEN)
 
-- [ ] 2.1 Create `src/modules/shared/interface/middleware/auth.ts` exporting `requireBearer(envVar, exemptPathPrefixes, exemptMethods?)` with `timingSafeEqual` + length pre-check, OpenAI-shaped 401 envelope. ~50 LOC.
-- [ ] 2.2 Modify `src/app.ts`: insert `app.use('*', requireBearer('AI_API_KEY', ['/health'], ['OPTIONS']))` BEFORE `app.all('*')` dispatcher; keep `/users/*` open. +2 LOC.
-- [ ] 2.3 `pnpm test:run` — 6 new auth tests pass; total 76+.
-- [ ] 2.4 REFACTOR: extract error-envelope helper; tests stay green.
+- [x] 2.1 Create `src/modules/shared/interface/middleware/auth.ts` exporting `requireBearer(envVar, exemptPathPrefixes, exemptMethods?)` with `timingSafeEqual` + length pre-check, OpenAI-shaped 401 envelope. ~50 LOC.
+- [x] 2.2 Modify `src/app.ts`: insert `app.use('*', requireBearer('AI_API_KEY', ['/health'], ['OPTIONS']))` BEFORE `app.all('*')` dispatcher; keep `/users/*` open. +2 LOC.
+- [x] 2.3 `pnpm test:run` — 6 new auth tests pass; total 76+.
+- [x] 2.4 REFACTOR: extract error-envelope helper; tests stay green.
 
 ## Phase 3: OpenAI route fix (GREEN)
 
-- [ ] 3.1 Modify `src/modules/ai-balancer/interface/routes/openai-chat.route.ts` ~L83: replace hardcoded `'openrouter/free'` with `parsed.data.model`. +5/−1 LOC.
-- [ ] 3.2 Route tests 4/4 pass; total 80+.
+- [x] 3.1 Modify `src/modules/ai-balancer/interface/routes/openai-chat.route.ts` ~L83: replace hardcoded `'openrouter/free'` with `parsed.data.model`. +5/−1 LOC.
+- [x] 3.2 Route tests 4/4 pass; total 80+.
 
 ## Phase 4: Bind + startup hardening (GREEN)
 
