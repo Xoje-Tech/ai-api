@@ -19,14 +19,17 @@ A **model balancer** between free-tier LLM APIs (Groq, OpenRouter) using round-r
 
 ```bash
 cd /home/hermes/projects/ai-api
-pnpm install
-cp .env.example .env   # then fill in real keys
-pnpm db:push           # Postgres schema sync (if DATABASE_URL set)
-pnpm test:run          # smoke check
-pnpm dev               # start dev server (tsx watch) on :3000
+pnpm install                    # host-side prerequisite for the test suite + lint
+cp .env.example .env            # fill in AI_API_KEY, GROQ_API_KEY, OPENROUTER_API_KEY
+pnpm test:run                   # smoke check
+docker compose up -d            # build + run ai-api on 127.0.0.1:3000 (loopback-only)
 ```
 
-Health check: `curl http://localhost:3000/health`
+Verify health: `docker compose ps` should report `State: healthy` within ~5 s, then
+`curl http://127.0.0.1:3000/health` returns `{ "status": "ok", ... }`.
+
+For hot-reload development instead of Docker:
+`pnpm dev` (tsx watch on :3000; runs from the same `.env`).
 
 ---
 
