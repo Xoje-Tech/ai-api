@@ -2,7 +2,11 @@
 FROM node:26-bookworm AS build
 WORKDIR /app
 RUN npm install -g corepack@latest && corepack enable
-COPY package.json pnpm-lock.yaml ./
+# pnpm 10+ ignores build scripts unless `onlyBuiltDependencies` is visible.
+# pnpm-workspace.yaml carries that config in this repo, so it must be in
+# the build context BEFORE `pnpm install` runs (the later COPY . would be
+# too late — install reads workspace config first).
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
 COPY . .
 RUN pnpm typecheck
