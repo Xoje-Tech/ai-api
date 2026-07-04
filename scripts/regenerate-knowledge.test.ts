@@ -101,13 +101,13 @@ GROQ_API_KEY=gsk_xxx
 
 # another comment
 DATABASE_URL=postgres://u:p@h:5432/db
-PORT=3000
+PORT=5678
 `;
     const vars = parseEnvFile(content);
     expect(vars).toHaveLength(3);
     expect(vars[0]).toEqual({ name: 'GROQ_API_KEY', value: 'gsk_xxx' });
     expect(vars[1]).toEqual({ name: 'DATABASE_URL', value: 'postgres://u:p@h:5432/db' });
-    expect(vars[2]).toEqual({ name: 'PORT', value: '3000' });
+    expect(vars[2]).toEqual({ name: 'PORT', value: '5678' });
   });
 
   it('treats # only at line start as a comment (not inline)', () => {
@@ -174,7 +174,7 @@ describe('generateEnvMarkdown', () => {
   it('emits type=Environment Config and a table with one row per var', () => {
     const vars: EnvVar[] = [
       { name: 'GROQ_API_KEY', value: 'gsk_xxx' },
-      { name: 'PORT', value: '3000' },
+      { name: 'PORT', value: '5678' },
     ];
     const md = generateEnvMarkdown(vars, '2026-06-29T22:00:00Z');
     expect(md).toMatch(/type: Environment Config/);

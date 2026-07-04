@@ -30,7 +30,8 @@ for (const [name, value] of Object.entries(requiredEnvVars)) {
   }
 }
 
-logger.info({ port: process.env.PORT ?? '3000' }, 'PORT configuration');
+const defaultPort = process.env.NODE_ENV === 'production' ? 6789 : 5678;
+logger.info({ port: process.env.PORT ?? defaultPort }, 'PORT configuration');
 
 const services: AIService[] = [];
 
@@ -85,7 +86,7 @@ const balancer = new CircuitBreakerBalancer(services, {
 });
 
 const app = buildApp({ services, balancer });
-const port = Number(process.env.PORT ?? 3000);
+const port = Number(process.env.PORT ?? defaultPort);
 
 // Per api-runtime spec: loopback-by-default. Non-loopback bind requires
 // AI_API_ALLOW_PUBLIC=true (explicit operator override).
