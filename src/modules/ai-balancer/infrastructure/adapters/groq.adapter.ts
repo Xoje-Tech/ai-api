@@ -65,5 +65,7 @@ export function createGroqService(client: GroqClient): AIService {
  * the streaming one.
  */
 export function createGroqClient(): GroqClient {
-  return new Groq() as unknown as GroqClient;
+  // If GROQ_API_KEY has whitespace or weird characters from injection, clean it up.
+  // We use the raw process.env.GROQ_API_KEY explicitly to ensure it loads.
+  return new Groq({ apiKey: (process.env.GROQ_API_KEY || '').trim() }) as unknown as GroqClient;
 }

@@ -6,7 +6,7 @@ export function createNvidiaService(): AIService {
   // But since the OpenAI constructor defaults to process.env.OPENAI_API_KEY, 
   // we must pass it explicitly.
   const client = new OpenAI({
-    apiKey: process.env.NVIDIA_API_KEY || process.env.OPENAI_API_KEY || '',
+    apiKey: process.env.NVIDIA_API_KEY || '',
     baseURL: 'https://integrate.api.nvidia.com/v1',
   });
 
