@@ -97,12 +97,17 @@ async function discoverNvidia() {
       // 2. Search for the model in the global OpenRouter dictionary by slug
       let contextWindow = 8192; // Default fallback
       let maxOutput = 4096;
+      let costPrompt = 0;
+      let costCompletion = 0;
       
       if (rawSlug) {
         const matchedOrModel = globalOpenRouterCache.find((orm: any) => orm.id.endsWith(rawSlug));
         if (matchedOrModel) {
           contextWindow = matchedOrModel.context_length || 8192;
           maxOutput = matchedOrModel.top_provider?.max_completion_tokens || 4096;
+          // Capture the real pricing from OpenRouter to enrich NVIDIA's knowledge
+          costPrompt = parseFloat(matchedOrModel.pricing?.prompt || '0');
+          costCompletion = parseFloat(matchedOrModel.pricing?.completion || '0');
         }
       }
 
@@ -110,7 +115,10 @@ async function discoverNvidia() {
         description: `NVIDIA NIM: ${m.id}`,
         context_window: contextWindow,
         max_output_tokens: maxOutput,
-        pricing: { input_per_1m: 0, output_per_1m: 0 }
+        pricing: { 
+          input_per_1m: costPrompt * 1000000, 
+          output_per_1m: costCompletion * 1000000 
+        }
       };
     }
     
