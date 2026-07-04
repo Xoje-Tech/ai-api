@@ -40,10 +40,10 @@ const TOP_P = 1;
 export function createGroqService(client: GroqClient): AIService {
   return {
     name: 'Groq',
-    async chat(messages: ChatMessage[]) {
+    async chat(messages: ChatMessage[], options?: { modelId: string }) {
       const stream = await client.chat.completions.create({
         messages: messages.map(toGroqMessage),
-        model: MODEL_KIMI,
+        model: options?.modelId || MODEL_KIMI,
         stream: true,
         temperature: TEMP,
         max_completion_tokens: TOKENS_LIMIT,
