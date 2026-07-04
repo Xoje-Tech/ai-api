@@ -41,6 +41,8 @@ async function updateProfileModels(adapterId: string, modelsDict: Record<string,
   console.log(`✅ Updated ${adapterId}.md with ${Object.keys(modelsDict).length} fresh models.`);
 }
 
+let globalOpenRouterCache: any[] = [];
+
 async function discoverOpenRouter() {
   console.log('\n--- 🌐 Discovering OpenRouter Free Models ---');
   try {
@@ -48,6 +50,9 @@ async function discoverOpenRouter() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json() as any;
     
+    // Save to global cache for cross-referencing
+    globalOpenRouterCache = data.data;
+
     // Filter free models
     const freeModels = data.data.filter((m: any) => 
       m.pricing?.prompt === '0' || m.pricing?.prompt === 0 || m.id.endsWith(':free')
@@ -85,13 +90,26 @@ async function discoverNvidia() {
     const data = await res.json() as any;
     
     const modelsDict: Record<string, any> = {};
-    // Taking the list from the API. The OpenAI-compatible endpoint doesn't give us 
-    // context window, so we apply a safe default.
     for (const m of data.data) {
+      // 1. Strip the prefix (e.g. '01-ai/' or 'meta/') to match against OpenRouter's slug
+      const rawSlug = m.id.split('/').pop();
+      
+      // 2. Search for the model in the global OpenRouter dictionary by slug
+      let contextWindow = 8192; // Default fallback
+      let maxOutput = 4096;
+      
+      if (rawSlug) {
+        const matchedOrModel = globalOpenRouterCache.find((orm: any) => orm.id.endsWith(rawSlug));
+        if (matchedOrModel) {
+          contextWindow = matchedOrModel.context_length || 8192;
+          maxOutput = matchedOrModel.top_provider?.max_completion_tokens || 4096;
+        }
+      }
+
       modelsDict[m.id] = {
         description: `NVIDIA NIM: ${m.id}`,
-        context_window: 8192, // Safe fallback
-        max_output_tokens: 4096,
+        context_window: contextWindow,
+        max_output_tokens: maxOutput,
         pricing: { input_per_1m: 0, output_per_1m: 0 }
       };
     }
