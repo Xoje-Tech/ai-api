@@ -22,14 +22,14 @@ cd /home/hermes/projects/ai-api
 pnpm install                    # host-side prerequisite for the test suite + lint
 cp .env.example .env            # fill in AI_API_KEY, GROQ_API_KEY, OPENROUTER_API_KEY
 pnpm test:run                   # smoke check
-docker compose up -d            # build + run ai-api on 127.0.0.1:3000 (loopback-only)
+docker compose up -d            # build + run ai-api on 127.0.0.1:6789 (loopback-only)
 ```
 
 Verify health: `docker compose ps` should report `State: healthy` within ~5 s, then
-`curl http://127.0.0.1:3000/health` returns `{ "status": "ok", ... }`.
+`curl http://127.0.0.1:6789/health` returns `{ "status": "ok", ... }`.
 
 For hot-reload development instead of Docker:
-`pnpm dev` (tsx watch on :3000; runs from the same `.env`).
+`pnpm dev` (tsx watch on :5678; runs from the same `.env`).
 
 ---
 
@@ -55,7 +55,7 @@ Configured in `.env` (see `.env.example`):
 
 | `GROQ_API_KEY` | yes (for Groq adapter) | Free tier at console.groq.com |
 | `OPENROUTER_API_KEY` | yes (for OpenRouter adapter) | Free tier at openrouter.ai |
-| `PORT` | no | Default 3000 |
+| `PORT` | no | Default 5678 for dev, 6789 for prod |
 | `NODE_ENV` | no | `development` \| `production` \| `test` |
 | `LOG_LEVEL` | no | `debug` \| `info` \| `warn` \| `error` |
 

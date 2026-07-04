@@ -10,6 +10,7 @@ import {
   createOpenRouterClient,
   createOpenRouterService,
 } from './modules/ai-balancer/infrastructure/adapters/openrouter.adapter.js';
+import { createNvidiaService } from './modules/ai-balancer/infrastructure/adapters/nvidia.adapter.js';
 import type { AIService } from './modules/ai-balancer/domain/ports/ai-service.port.js';
 import { logger } from './modules/shared/infrastructure/logger/logger.js';
 
@@ -18,6 +19,7 @@ logger.info('Checking environment variables...');
 const requiredEnvVars: Record<string, string | undefined> = {
   GROQ_API_KEY: process.env.GROQ_API_KEY,
   OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY,
+  NVIDIA_API_KEY: process.env.NVIDIA_API_KEY,
 };
 
 for (const [name, value] of Object.entries(requiredEnvVars)) {
@@ -28,7 +30,8 @@ for (const [name, value] of Object.entries(requiredEnvVars)) {
   }
 }
 
-logger.info({ port: process.env.PORT ?? '3000' }, 'PORT configuration');
+const defaultPort = process.env.NODE_ENV === 'production' ? 6789 : 5678;
+logger.info({ port: process.env.PORT ?? defaultPort }, 'PORT configuration');
 
 const services: AIService[] = [];
 
@@ -46,6 +49,16 @@ try {
   logger.error(
     { err: (err as Error).message },
     'Failed to load OpenRouter service',
+  );
+}
+
+try {
+  services.push(createNvidiaService());
+  logger.info('NVIDIA service loaded');
+} catch (err) {
+  logger.error(
+    { err: (err as Error).message },
+    'Failed to load NVIDIA service',
   );
 }
 
@@ -73,7 +86,7 @@ const balancer = new CircuitBreakerBalancer(services, {
 });
 
 const app = buildApp({ services, balancer });
-const port = Number(process.env.PORT ?? 3000);
+const port = Number(process.env.PORT ?? defaultPort);
 
 // Per api-runtime spec: loopback-by-default. Non-loopback bind requires
 // AI_API_ALLOW_PUBLIC=true (explicit operator override).
