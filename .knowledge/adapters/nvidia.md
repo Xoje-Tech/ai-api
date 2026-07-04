@@ -3,11 +3,17 @@ type: Provider Profile
 title: NVIDIA NIM
 description: NVIDIA Inference Microservices. Focuses on specialized hardware capabilities.
 resource_url: https://build.nvidia.com/explore/discover
-tags: [provider, free-tier, nvidia, nim, llm, ai-balancer]
-timestamp: 2026-07-04T12:00:00Z
+tags:
+  - provider
+  - free-tier
+  - nvidia
+  - nim
+  - llm
+  - ai-balancer
+timestamp: '2026-07-04T12:00:00Z'
 provider_config:
-  tier_status: "free"
-  tier_type: "model-bound"
+  tier_status: free
+  tier_type: model-bound
   usage_limits:
     rpm: 40
     rpd: 57600
@@ -15,23 +21,857 @@ provider_config:
     tpd: 1000000
     concurrent_requests: 1
   models:
-    "meta/llama-3.1-70b-instruct":
-      description: "Meta Llama 3.1 70B Instruct via NIM"
-      context_window: 131072
-      max_output_tokens: 8192
+    01-ai/yi-large:
+      description: 'NVIDIA NIM: 01-ai/yi-large'
+      context_window: 8192
+      max_output_tokens: 4096
       pricing:
-        input_per_1m: 0.00
-        output_per_1m: 0.00
-    "mistralai/mixtral-8x22b-instruct-v0.1":
-      description: "Mistral Mixtral 8x22B Instruct via NIM"
-      context_window: 65536
-      max_output_tokens: 8192
+        input_per_1m: 0
+        output_per_1m: 0
+    abacusai/dracarys-llama-3.1-70b-instruct:
+      description: 'NVIDIA NIM: abacusai/dracarys-llama-3.1-70b-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
       pricing:
-        input_per_1m: 0.00
-        output_per_1m: 0.00
+        input_per_1m: 0
+        output_per_1m: 0
+    adept/fuyu-8b:
+      description: 'NVIDIA NIM: adept/fuyu-8b'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    ai21labs/jamba-1.5-large-instruct:
+      description: 'NVIDIA NIM: ai21labs/jamba-1.5-large-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    aisingapore/sea-lion-7b-instruct:
+      description: 'NVIDIA NIM: aisingapore/sea-lion-7b-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    baai/bge-m3:
+      description: 'NVIDIA NIM: baai/bge-m3'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    bigcode/starcoder2-15b:
+      description: 'NVIDIA NIM: bigcode/starcoder2-15b'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    bytedance/seed-oss-36b-instruct:
+      description: 'NVIDIA NIM: bytedance/seed-oss-36b-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    databricks/dbrx-instruct:
+      description: 'NVIDIA NIM: databricks/dbrx-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    deepseek-ai/deepseek-coder-6.7b-instruct:
+      description: 'NVIDIA NIM: deepseek-ai/deepseek-coder-6.7b-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    deepseek-ai/deepseek-v4-flash:
+      description: 'NVIDIA NIM: deepseek-ai/deepseek-v4-flash'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    deepseek-ai/deepseek-v4-pro:
+      description: 'NVIDIA NIM: deepseek-ai/deepseek-v4-pro'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    google/codegemma-1.1-7b:
+      description: 'NVIDIA NIM: google/codegemma-1.1-7b'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    google/codegemma-7b:
+      description: 'NVIDIA NIM: google/codegemma-7b'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    google/deplot:
+      description: 'NVIDIA NIM: google/deplot'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    google/diffusiongemma-26b-a4b-it:
+      description: 'NVIDIA NIM: google/diffusiongemma-26b-a4b-it'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    google/gemma-2-2b-it:
+      description: 'NVIDIA NIM: google/gemma-2-2b-it'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    google/gemma-2b:
+      description: 'NVIDIA NIM: google/gemma-2b'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    google/gemma-3-12b-it:
+      description: 'NVIDIA NIM: google/gemma-3-12b-it'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    google/gemma-3-4b-it:
+      description: 'NVIDIA NIM: google/gemma-3-4b-it'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    google/gemma-3n-e2b-it:
+      description: 'NVIDIA NIM: google/gemma-3n-e2b-it'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    google/gemma-3n-e4b-it:
+      description: 'NVIDIA NIM: google/gemma-3n-e4b-it'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    google/gemma-4-31b-it:
+      description: 'NVIDIA NIM: google/gemma-4-31b-it'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    google/recurrentgemma-2b:
+      description: 'NVIDIA NIM: google/recurrentgemma-2b'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    ibm/granite-3.0-3b-a800m-instruct:
+      description: 'NVIDIA NIM: ibm/granite-3.0-3b-a800m-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    ibm/granite-3.0-8b-instruct:
+      description: 'NVIDIA NIM: ibm/granite-3.0-8b-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    ibm/granite-34b-code-instruct:
+      description: 'NVIDIA NIM: ibm/granite-34b-code-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    ibm/granite-8b-code-instruct:
+      description: 'NVIDIA NIM: ibm/granite-8b-code-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    meta/codellama-70b:
+      description: 'NVIDIA NIM: meta/codellama-70b'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    meta/llama-3.1-70b-instruct:
+      description: 'NVIDIA NIM: meta/llama-3.1-70b-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    meta/llama-3.1-8b-instruct:
+      description: 'NVIDIA NIM: meta/llama-3.1-8b-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    meta/llama-3.2-11b-vision-instruct:
+      description: 'NVIDIA NIM: meta/llama-3.2-11b-vision-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    meta/llama-3.2-1b-instruct:
+      description: 'NVIDIA NIM: meta/llama-3.2-1b-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    meta/llama-3.2-3b-instruct:
+      description: 'NVIDIA NIM: meta/llama-3.2-3b-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    meta/llama-3.2-90b-vision-instruct:
+      description: 'NVIDIA NIM: meta/llama-3.2-90b-vision-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    meta/llama-3.3-70b-instruct:
+      description: 'NVIDIA NIM: meta/llama-3.3-70b-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    meta/llama-4-maverick-17b-128e-instruct:
+      description: 'NVIDIA NIM: meta/llama-4-maverick-17b-128e-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    meta/llama-guard-4-12b:
+      description: 'NVIDIA NIM: meta/llama-guard-4-12b'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    meta/llama2-70b:
+      description: 'NVIDIA NIM: meta/llama2-70b'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    microsoft/kosmos-2:
+      description: 'NVIDIA NIM: microsoft/kosmos-2'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    microsoft/phi-3-vision-128k-instruct:
+      description: 'NVIDIA NIM: microsoft/phi-3-vision-128k-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    microsoft/phi-3.5-moe-instruct:
+      description: 'NVIDIA NIM: microsoft/phi-3.5-moe-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    microsoft/phi-4-mini-instruct:
+      description: 'NVIDIA NIM: microsoft/phi-4-mini-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    microsoft/phi-4-multimodal-instruct:
+      description: 'NVIDIA NIM: microsoft/phi-4-multimodal-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    minimaxai/minimax-m2.7:
+      description: 'NVIDIA NIM: minimaxai/minimax-m2.7'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    minimaxai/minimax-m3:
+      description: 'NVIDIA NIM: minimaxai/minimax-m3'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    mistralai/codestral-22b-instruct-v0.1:
+      description: 'NVIDIA NIM: mistralai/codestral-22b-instruct-v0.1'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    mistralai/ministral-14b-instruct-2512:
+      description: 'NVIDIA NIM: mistralai/ministral-14b-instruct-2512'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    mistralai/mistral-7b-instruct-v0.3:
+      description: 'NVIDIA NIM: mistralai/mistral-7b-instruct-v0.3'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    mistralai/mistral-large:
+      description: 'NVIDIA NIM: mistralai/mistral-large'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    mistralai/mistral-large-2-instruct:
+      description: 'NVIDIA NIM: mistralai/mistral-large-2-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    mistralai/mistral-large-3-675b-instruct-2512:
+      description: 'NVIDIA NIM: mistralai/mistral-large-3-675b-instruct-2512'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    mistralai/mistral-medium-3.5-128b:
+      description: 'NVIDIA NIM: mistralai/mistral-medium-3.5-128b'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    mistralai/mistral-nemotron:
+      description: 'NVIDIA NIM: mistralai/mistral-nemotron'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    mistralai/mistral-small-4-119b-2603:
+      description: 'NVIDIA NIM: mistralai/mistral-small-4-119b-2603'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    mistralai/mixtral-8x22b-v0.1:
+      description: 'NVIDIA NIM: mistralai/mixtral-8x22b-v0.1'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    mistralai/mixtral-8x7b-instruct-v0.1:
+      description: 'NVIDIA NIM: mistralai/mixtral-8x7b-instruct-v0.1'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    moonshotai/kimi-k2.6:
+      description: 'NVIDIA NIM: moonshotai/kimi-k2.6'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nv-mistralai/mistral-nemo-12b-instruct:
+      description: 'NVIDIA NIM: nv-mistralai/mistral-nemo-12b-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/ai-synthetic-video-detector:
+      description: 'NVIDIA NIM: nvidia/ai-synthetic-video-detector'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/cosmos-reason2-8b:
+      description: 'NVIDIA NIM: nvidia/cosmos-reason2-8b'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/embed-qa-4:
+      description: 'NVIDIA NIM: nvidia/embed-qa-4'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/gliner-pii:
+      description: 'NVIDIA NIM: nvidia/gliner-pii'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/ising-calibration-1-35b-a3b:
+      description: 'NVIDIA NIM: nvidia/ising-calibration-1-35b-a3b'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/llama-3.1-nemoguard-8b-content-safety:
+      description: 'NVIDIA NIM: nvidia/llama-3.1-nemoguard-8b-content-safety'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/llama-3.1-nemoguard-8b-topic-control:
+      description: 'NVIDIA NIM: nvidia/llama-3.1-nemoguard-8b-topic-control'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/llama-3.1-nemotron-51b-instruct:
+      description: 'NVIDIA NIM: nvidia/llama-3.1-nemotron-51b-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/llama-3.1-nemotron-70b-instruct:
+      description: 'NVIDIA NIM: nvidia/llama-3.1-nemotron-70b-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/llama-3.1-nemotron-nano-8b-v1:
+      description: 'NVIDIA NIM: nvidia/llama-3.1-nemotron-nano-8b-v1'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/llama-3.1-nemotron-nano-vl-8b-v1:
+      description: 'NVIDIA NIM: nvidia/llama-3.1-nemotron-nano-vl-8b-v1'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/llama-3.1-nemotron-safety-guard-8b-v3:
+      description: 'NVIDIA NIM: nvidia/llama-3.1-nemotron-safety-guard-8b-v3'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/llama-3.1-nemotron-ultra-253b-v1:
+      description: 'NVIDIA NIM: nvidia/llama-3.1-nemotron-ultra-253b-v1'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/llama-3.2-nemoretriever-1b-vlm-embed-v1:
+      description: 'NVIDIA NIM: nvidia/llama-3.2-nemoretriever-1b-vlm-embed-v1'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/llama-3.2-nv-embedqa-1b-v1:
+      description: 'NVIDIA NIM: nvidia/llama-3.2-nv-embedqa-1b-v1'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/llama-3.3-nemotron-super-49b-v1:
+      description: 'NVIDIA NIM: nvidia/llama-3.3-nemotron-super-49b-v1'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/llama-3.3-nemotron-super-49b-v1.5:
+      description: 'NVIDIA NIM: nvidia/llama-3.3-nemotron-super-49b-v1.5'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/llama-nemotron-embed-1b-v2:
+      description: 'NVIDIA NIM: nvidia/llama-nemotron-embed-1b-v2'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/llama-nemotron-embed-vl-1b-v2:
+      description: 'NVIDIA NIM: nvidia/llama-nemotron-embed-vl-1b-v2'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/llama3-chatqa-1.5-70b:
+      description: 'NVIDIA NIM: nvidia/llama3-chatqa-1.5-70b'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/mistral-nemo-minitron-8b-8k-instruct:
+      description: 'NVIDIA NIM: nvidia/mistral-nemo-minitron-8b-8k-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/nemoretriever-parse:
+      description: 'NVIDIA NIM: nvidia/nemoretriever-parse'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/nemotron-3-content-safety:
+      description: 'NVIDIA NIM: nvidia/nemotron-3-content-safety'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/nemotron-3-nano-30b-a3b:
+      description: 'NVIDIA NIM: nvidia/nemotron-3-nano-30b-a3b'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:
+      description: 'NVIDIA NIM: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/nemotron-3-super-120b-a12b:
+      description: 'NVIDIA NIM: nvidia/nemotron-3-super-120b-a12b'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/nemotron-3-ultra-550b-a55b:
+      description: 'NVIDIA NIM: nvidia/nemotron-3-ultra-550b-a55b'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/nemotron-3.5-content-safety:
+      description: 'NVIDIA NIM: nvidia/nemotron-3.5-content-safety'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/nemotron-4-340b-instruct:
+      description: 'NVIDIA NIM: nvidia/nemotron-4-340b-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/nemotron-4-340b-reward:
+      description: 'NVIDIA NIM: nvidia/nemotron-4-340b-reward'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/nemotron-content-safety-reasoning-4b:
+      description: 'NVIDIA NIM: nvidia/nemotron-content-safety-reasoning-4b'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/nemotron-mini-4b-instruct:
+      description: 'NVIDIA NIM: nvidia/nemotron-mini-4b-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/nemotron-nano-12b-v2-vl:
+      description: 'NVIDIA NIM: nvidia/nemotron-nano-12b-v2-vl'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/nemotron-nano-3-30b-a3b:
+      description: 'NVIDIA NIM: nvidia/nemotron-nano-3-30b-a3b'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/nemotron-parse:
+      description: 'NVIDIA NIM: nvidia/nemotron-parse'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/neva-22b:
+      description: 'NVIDIA NIM: nvidia/neva-22b'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/nv-embed-v1:
+      description: 'NVIDIA NIM: nvidia/nv-embed-v1'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/nv-embedcode-7b-v1:
+      description: 'NVIDIA NIM: nvidia/nv-embedcode-7b-v1'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/nv-embedqa-e5-v5:
+      description: 'NVIDIA NIM: nvidia/nv-embedqa-e5-v5'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/nv-embedqa-mistral-7b-v2:
+      description: 'NVIDIA NIM: nvidia/nv-embedqa-mistral-7b-v2'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/nvclip:
+      description: 'NVIDIA NIM: nvidia/nvclip'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/nvidia-nemotron-nano-9b-v2:
+      description: 'NVIDIA NIM: nvidia/nvidia-nemotron-nano-9b-v2'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/riva-translate-4b-instruct:
+      description: 'NVIDIA NIM: nvidia/riva-translate-4b-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/riva-translate-4b-instruct-v1.1:
+      description: 'NVIDIA NIM: nvidia/riva-translate-4b-instruct-v1.1'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    nvidia/vila:
+      description: 'NVIDIA NIM: nvidia/vila'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    openai/gpt-oss-120b:
+      description: 'NVIDIA NIM: openai/gpt-oss-120b'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    openai/gpt-oss-20b:
+      description: 'NVIDIA NIM: openai/gpt-oss-20b'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    qwen/qwen3-next-80b-a3b-instruct:
+      description: 'NVIDIA NIM: qwen/qwen3-next-80b-a3b-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    qwen/qwen3.5-122b-a10b:
+      description: 'NVIDIA NIM: qwen/qwen3.5-122b-a10b'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    qwen/qwen3.5-397b-a17b:
+      description: 'NVIDIA NIM: qwen/qwen3.5-397b-a17b'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    sarvamai/sarvam-m:
+      description: 'NVIDIA NIM: sarvamai/sarvam-m'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    snowflake/arctic-embed-l:
+      description: 'NVIDIA NIM: snowflake/arctic-embed-l'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    stepfun-ai/step-3.5-flash:
+      description: 'NVIDIA NIM: stepfun-ai/step-3.5-flash'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    stepfun-ai/step-3.7-flash:
+      description: 'NVIDIA NIM: stepfun-ai/step-3.7-flash'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    stockmark/stockmark-2-100b-instruct:
+      description: 'NVIDIA NIM: stockmark/stockmark-2-100b-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    upstage/solar-10.7b-instruct:
+      description: 'NVIDIA NIM: upstage/solar-10.7b-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    writer/palmyra-creative-122b:
+      description: 'NVIDIA NIM: writer/palmyra-creative-122b'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    writer/palmyra-fin-70b-32k:
+      description: 'NVIDIA NIM: writer/palmyra-fin-70b-32k'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    writer/palmyra-med-70b:
+      description: 'NVIDIA NIM: writer/palmyra-med-70b'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    writer/palmyra-med-70b-32k:
+      description: 'NVIDIA NIM: writer/palmyra-med-70b-32k'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    z-ai/glm-5.2:
+      description: 'NVIDIA NIM: z-ai/glm-5.2'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
+    zyphra/zamba2-7b-instruct:
+      description: 'NVIDIA NIM: zyphra/zamba2-7b-instruct'
+      context_window: 8192
+      max_output_tokens: 4096
+      pricing:
+        input_per_1m: 0
+        output_per_1m: 0
 implementation_binding:
-  adapter_id: "nvidia"
-  env_required: ["NVIDIA_API_KEY"]
+  adapter_id: nvidia
+  env_required:
+    - NVIDIA_API_KEY
 ---
 # NVIDIA NIM Provider Profile
 
