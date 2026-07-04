@@ -16,7 +16,8 @@
     "typecheck": "tsc --noEmit",
     "knowledge:regen": "tsx scripts/regenerate-knowledge.ts",
     "knowledge:lint": "tsx scripts/lint-knowledge-bundle.ts",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test:smoke": "bash scripts/smoke-test.sh"
   },
   "lint-staged": {
     "src/modules/*/infrastructure/adapters/*.ts": "pnpm exec tsx scripts/regenerate-knowledge.ts --target adapters",
