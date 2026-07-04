@@ -10,6 +10,7 @@ import {
   createOpenRouterClient,
   createOpenRouterService,
 } from './modules/ai-balancer/infrastructure/adapters/openrouter.adapter.js';
+import { createNvidiaService } from './modules/ai-balancer/infrastructure/adapters/nvidia.adapter.js';
 import type { AIService } from './modules/ai-balancer/domain/ports/ai-service.port.js';
 import { logger } from './modules/shared/infrastructure/logger/logger.js';
 
@@ -47,6 +48,16 @@ try {
   logger.error(
     { err: (err as Error).message },
     'Failed to load OpenRouter service',
+  );
+}
+
+try {
+  services.push(createNvidiaService());
+  logger.info('NVIDIA service loaded');
+} catch (err) {
+  logger.error(
+    { err: (err as Error).message },
+    'Failed to load NVIDIA service',
   );
 }
 
