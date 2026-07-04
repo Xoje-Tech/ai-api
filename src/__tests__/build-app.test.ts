@@ -11,7 +11,7 @@ import type { AIService } from '../modules/ai-balancer/domain/ports/ai-service.p
 const TEST_BEARER = 'test-key-1234567890abcdef';
 
 const stubService = (name: string, content: string): AIService => ({
-  name,
+  name, models: [],
   chat: async () => {
     async function* gen() {
       yield content;

@@ -5,5 +5,6 @@ export interface ChatMessage {
 
 export interface AIService {
   readonly name: string;
+  readonly models: string[];
   chat: (messages: ChatMessage[]) => Promise<AsyncIterable<string>>;
 }

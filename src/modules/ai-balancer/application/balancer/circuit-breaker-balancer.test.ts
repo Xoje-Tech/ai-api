@@ -3,7 +3,7 @@ import { CircuitBreakerBalancer } from '@ai-balancer/application/balancer/circui
 import type { AIService } from '@ai-balancer/domain/ports/ai-service.port.js';
 
 const stubService = (name: string): AIService => ({
-  name,
+  name, models: [],
   chat: async () => (async function* () {})(),
 });
 
