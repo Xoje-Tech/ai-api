@@ -9,7 +9,7 @@
   "scripts": {
     "start": "tsx src/index.ts",
     "dev": "tsx watch src/index.ts",
-    "dev:bws": "bash scripts/dev-with-bws.sh",
+    "dev:bws": "bash bin/start.sh dev",
     "test": "vitest",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
