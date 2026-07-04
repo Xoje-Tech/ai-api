@@ -6,7 +6,7 @@ import * as yaml from 'js-yaml';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const KNOWLEDGE_DIR = path.resolve(__dirname, '../.knowledge/adapters');
+const KNOWLEDGE_DIR = path.resolve(__dirname, '../.knowledge/providers');
 const OUTPUT_FILE = path.resolve(__dirname, '../src/modules/ai-balancer/infrastructure/provider-registry.json');
 
 async function syncProviderKnowledge() {

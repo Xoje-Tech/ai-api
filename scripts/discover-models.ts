@@ -21,7 +21,7 @@ if (fsSync.existsSync(ENV_PATH)) {
  * Reads the OKF profile, updates the provider_config.models block, and saves it.
  */
 async function updateProfileModels(adapterId: string, modelsDict: Record<string, any>) {
-  const filePath = path.resolve(__dirname, `../.knowledge/adapters/${adapterId}.md`);
+  const filePath = path.resolve(__dirname, `../.knowledge/providers/${adapterId}.md`);
   const content = await fs.readFile(filePath, 'utf-8');
   
   const match = content.match(/^---\n([\s\S]*?)\n---/);
