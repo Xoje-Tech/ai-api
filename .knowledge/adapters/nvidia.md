@@ -7,6 +7,7 @@ tags: [provider, free-tier, nvidia, nim, llm, ai-balancer]
 timestamp: 2026-07-04T12:00:00Z
 provider_config:
   tier_status: "free"
+  tier_type: "model-bound"
   usage_limits:
     rpm: 40
     rpd: 57600

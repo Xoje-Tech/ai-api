@@ -41,6 +41,7 @@ async function syncProviderKnowledge() {
             name: parsed.title,
             description: parsed.description,
             tier_status: parsed.provider_config?.tier_status || 'unknown',
+            tier_type: parsed.provider_config?.tier_type || 'unknown',
             usage_limits: parsed.provider_config?.usage_limits || {},
             models: parsed.provider_config?.models || {},
             env_required: parsed.implementation_binding?.env_required || []

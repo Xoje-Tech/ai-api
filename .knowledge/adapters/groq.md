@@ -7,6 +7,7 @@ tags: [provider, free-tier, groq, llm, ai-balancer, streaming]
 timestamp: 2026-07-04T12:00:00Z
 provider_config:
   tier_status: "free"
+  tier_type: "account-bound"
   usage_limits:
     rpm: 30
     rpd: 14400

@@ -4,6 +4,7 @@
     "name": "Groq",
     "description": "Fast LLM inference engine using LPUs. Focuses on low latency.",
     "tier_status": "free",
+    "tier_type": "account-bound",
     "usage_limits": {
       "rpm": 30,
       "rpd": 14400,
@@ -58,6 +59,7 @@
     "name": "NVIDIA NIM",
     "description": "NVIDIA Inference Microservices. Focuses on specialized hardware capabilities.",
     "tier_status": "free",
+    "tier_type": "model-bound",
     "usage_limits": {
       "rpm": 40,
       "rpd": 57600,
@@ -94,6 +96,7 @@
     "name": "OpenRouter",
     "description": "Unified API for multiple LLMs. We target their \":free\" model variants as a load-balancing fallback.",
     "tier_status": "free",
+    "tier_type": "model-bound",
     "usage_limits": {
       "rpm": 20,
       "rpd": 50,
