@@ -10,34 +10,34 @@ provider_config:
   usage_limits:
     rpm: 30
     rpd: 14400
-    tpm: 14000
+    tpm: 6000
     tpd: 500000
     concurrent_requests: 1
   models:
-    "llama3-8b-8192":
-      description: "Meta Llama 3 8B Instruct"
+    "llama3.1-8b":
+      description: "Meta Llama 3.1 8B Instruct"
       context_window: 8192
       max_output_tokens: 8192
       pricing:
         input_per_1m: 0.05
         output_per_1m: 0.08
-    "llama3-70b-8192":
-      description: "Meta Llama 3 70B Instruct"
+    "llama3.3-70b":
+      description: "Meta Llama 3.3 70B Instruct"
       context_window: 8192
       max_output_tokens: 8192
       pricing:
         input_per_1m: 0.59
         output_per_1m: 0.79
-    "mixtral-8x7b-32768":
-      description: "Mistral Mixtral 8x7B"
+    "openai/gpt-oss-120b":
+      description: "GPT OSS 120B (Groq variant)"
       context_window: 32768
       max_output_tokens: 32768
       pricing:
         input_per_1m: 0.24
         output_per_1m: 0.24
-    "gemma-7b-it":
-      description: "Google Gemma 7B Instruct"
-      context_window: 8192
+    "qwen/qwen3-32b":
+      description: "Qwen 3 32B Instruct"
+      context_window: 32768
       max_output_tokens: 8192
       pricing:
         input_per_1m: 0.07

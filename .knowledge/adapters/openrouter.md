@@ -2,36 +2,36 @@
 type: Provider Profile
 title: OpenRouter
 description: Unified API for multiple LLMs. We target their ":free" model variants as a load-balancing fallback.
-resource_url: https://openrouter.ai/docs#rate-limits
+resource_url: https://openrouter.ai/docs/api/reference/limits
 tags: [provider, free-tier, openrouter, llm, ai-balancer, aggregator]
 timestamp: 2026-07-04T12:00:00Z
 provider_config:
   tier_status: "free"
   usage_limits:
     rpm: 20
-    rpd: 200
+    rpd: 50
     tpm: 10000
     tpd: 100000
     concurrent_requests: 1
   models:
-    "meta-llama/llama-3-8b-instruct:free":
-      description: "Free Llama 3 8B via OpenRouter"
-      context_window: 8192
+    "nousresearch/hermes-3-llama-3.1-405b:free":
+      description: "Hermes 3 Llama 3.1 405B via OpenRouter"
+      context_window: 131072
       max_output_tokens: 8192
       pricing:
         input_per_1m: 0.00
         output_per_1m: 0.00
-    "google/gemma-7b-it:free":
-      description: "Free Gemma 7B via OpenRouter"
-      context_window: 8192
+    "meta-llama/llama-3.3-70b-instruct:free":
+      description: "Free Llama 3.3 70B Instruct via OpenRouter"
+      context_window: 131072
       max_output_tokens: 8192
       pricing:
         input_per_1m: 0.00
         output_per_1m: 0.00
-    "mistralai/mistral-7b-instruct:free":
-      description: "Free Mistral 7B via OpenRouter"
+    "qwen/qwen3-coder:free":
+      description: "Free Qwen 3 Coder via OpenRouter"
       context_window: 32768
-      max_output_tokens: 32768
+      max_output_tokens: 8192
       pricing:
         input_per_1m: 0.00
         output_per_1m: 0.00
