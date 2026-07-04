@@ -16,11 +16,11 @@
     "typecheck": "tsc --noEmit",
     "knowledge:regen": "tsx scripts/regenerate-knowledge.ts",
     "knowledge:lint": "tsx scripts/lint-knowledge-bundle.ts",
+    "knowledge:sync": "tsx scripts/sync-provider-knowledge.ts",
     "prepare": "husky",
     "test:smoke": "bash scripts/smoke-test.sh"
   },
   "lint-staged": {
-    "src/modules/*/infrastructure/adapters/*.ts": "pnpm exec tsx scripts/regenerate-knowledge.ts --target adapters",
     "src/modules/*/interface/routes/*.ts": "pnpm exec tsx scripts/regenerate-knowledge.ts --target api",
     ".env.example": "pnpm exec tsx scripts/regenerate-knowledge.ts --target env"
   },
@@ -34,9 +34,11 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
+    "@types/js-yaml": "4.0.9",
     "@types/node": "^20.11.0",
     "@vitest/coverage-v8": "4.1.9",
     "husky": "9.1.7",
+    "js-yaml": "5.2.1",
     "lint-staged": "17.0.8",
     "tsx": "^4.7.1",
     "typescript": "^5.3.3",
