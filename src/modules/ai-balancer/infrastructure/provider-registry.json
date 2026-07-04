@@ -53,6 +53,42 @@
       "GROQ_API_KEY"
     ]
   },
+  "nvidia": {
+    "id": "nvidia",
+    "name": "NVIDIA NIM",
+    "description": "NVIDIA Inference Microservices. Focuses on specialized hardware capabilities.",
+    "tier_status": "free",
+    "usage_limits": {
+      "rpm": 40,
+      "rpd": 57600,
+      "tpm": 100000,
+      "tpd": 1000000,
+      "concurrent_requests": 1
+    },
+    "models": {
+      "meta/llama-3.1-70b-instruct": {
+        "description": "Meta Llama 3.1 70B Instruct via NIM",
+        "context_window": 131072,
+        "max_output_tokens": 8192,
+        "pricing": {
+          "input_per_1m": 0,
+          "output_per_1m": 0
+        }
+      },
+      "mistralai/mixtral-8x22b-instruct-v0.1": {
+        "description": "Mistral Mixtral 8x22B Instruct via NIM",
+        "context_window": 65536,
+        "max_output_tokens": 8192,
+        "pricing": {
+          "input_per_1m": 0,
+          "output_per_1m": 0
+        }
+      }
+    },
+    "env_required": [
+      "NVIDIA_API_KEY"
+    ]
+  },
   "openrouter": {
     "id": "openrouter",
     "name": "OpenRouter",
