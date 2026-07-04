@@ -4,10 +4,21 @@ on:
   push:
     branches:
       - master
+      - develop
+    paths-ignore:
+      - '**.md'
+      - '**.txt'
+      - 'openspec/**'
+      - '.knowledge/**'
   pull_request:
     branches:
       - master
       - develop
+    paths-ignore:
+      - '**.md'
+      - '**.txt'
+      - 'openspec/**'
+      - '.knowledge/**'
 
 jobs:
   test:

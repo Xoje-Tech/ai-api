@@ -16,7 +16,8 @@
     "typecheck": "tsc --noEmit",
     "knowledge:regen": "tsx scripts/regenerate-knowledge.ts",
     "knowledge:lint": "tsx scripts/lint-knowledge-bundle.ts",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test:smoke": "bash scripts/smoke-test.sh"
   },
   "lint-staged": {
     "src/modules/*/infrastructure/adapters/*.ts": "pnpm exec tsx scripts/regenerate-knowledge.ts --target adapters",
@@ -28,8 +29,8 @@
     "@openrouter/sdk": "0.9.11",
     "groq-sdk": "0.37.0",
     "hono": "4.12.27",
+    "openai": "6.45.0",
     "pino": "10.3.1",
-    "postgres": "^3.4.4",
     "zod": "4.4.3"
   },
   "devDependencies": {

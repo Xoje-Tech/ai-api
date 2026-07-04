@@ -36,7 +36,7 @@ input validation, structured logging, and a health endpoint.
    pnpm dev     # tsx watch src/index.ts
    ```
 
-The server boots on `http://127.0.0.1:3000` (override with `PORT`).
+The server boots on `http://127.0.0.1:5678` (override with `PORT`).
 
 ### Production via Docker
 
@@ -153,7 +153,7 @@ a port.
 | `GROQ_API_KEY`       | recommended       | Free at console.groq.com |
 | `OPENROUTER_API_KEY` | recommended       | Free at openrouter.ai |
 | `DATABASE_URL`       | only for `/users` | PostgreSQL connection string |
-| `PORT`               | no (default 3000) | |
+| `PORT`               | no (default 5678/dev 6789/prod) | |
 | `LOG_LEVEL`          | no (default info) | pino level: trace/debug/info/warn/error/fatal |
 | `LOG_PRETTY`         | no                | `=1` for human-readable transport in dev |
 
