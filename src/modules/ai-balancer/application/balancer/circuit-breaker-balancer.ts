@@ -1,4 +1,5 @@
 import type { AIService } from '@ai-balancer/domain/ports/ai-service.port.js';
+import { getAvailableModelsForContext } from '../../infrastructure/provider.registry.js';
 
 export interface CircuitBreakerOptions {
   failureThreshold?: number;
@@ -66,5 +67,26 @@ export class CircuitBreakerBalancer {
     const fallback = this.services[this.rrIndex]!;
     this.rrIndex = (this.rrIndex + 1) % this.services.length;
     return fallback;
+  }
+
+  selectServiceForContext(estimatedTokens: number): { service: AIService; modelId: string } | null {
+    const available = getAvailableModelsForContext(estimatedTokens);
+    if (available.length === 0) return null;
+    
+    for (const model of available) {
+      const providerIdStr = model.providerId.toLowerCase();
+      const service = this.services.find(s => s.name.toLowerCase() === providerIdStr);
+      if (service && this.isHealthy(service.name)) {
+        return { service, modelId: model.modelId };
+      }
+    }
+    
+    for (const model of available) {
+      const providerIdStr = model.providerId.toLowerCase();
+      const service = this.services.find(s => s.name.toLowerCase() === providerIdStr);
+      if (service) return { service, modelId: model.modelId };
+    }
+    
+    return null;
   }
 }

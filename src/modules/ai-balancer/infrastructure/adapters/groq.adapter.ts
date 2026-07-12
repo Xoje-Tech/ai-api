@@ -41,15 +41,14 @@ export function createGroqService(client: GroqClient): AIService {
   return {
     name: 'Groq',
     models: [
-      'llama3-8b-8192',
-      'llama3-70b-8192',
-      'mixtral-8x7b-32768',
-      'gemma-7b-it',
+      'llama3.1-8b',
+      'llama3.3-70b',
+      'qwen/qwen3-32b',
     ],
-    async chat(messages: ChatMessage[]) {
+    async chat(messages: ChatMessage[], options?: { modelId: string }) {
       const stream = await client.chat.completions.create({
         messages: messages.map(toGroqMessage),
-        model: MODEL_KIMI,
+        model: options?.modelId || MODEL_KIMI,
         stream: true,
         temperature: TEMP,
         max_completion_tokens: TOKENS_LIMIT,
@@ -71,5 +70,7 @@ export function createGroqService(client: GroqClient): AIService {
  * the streaming one.
  */
 export function createGroqClient(): GroqClient {
-  return new Groq() as unknown as GroqClient;
+  // If GROQ_API_KEY has whitespace or weird characters from injection, clean it up.
+  // We use the raw process.env.GROQ_API_KEY explicitly to ensure it loads.
+  return new Groq({ apiKey: (process.env.GROQ_API_KEY || '').trim() }) as unknown as GroqClient;
 }

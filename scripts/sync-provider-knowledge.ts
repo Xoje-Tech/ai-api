@@ -6,7 +6,7 @@ import * as yaml from 'js-yaml';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const KNOWLEDGE_DIR = path.resolve(__dirname, '../.knowledge/adapters');
+const KNOWLEDGE_DIR = path.resolve(__dirname, '../.knowledge/providers');
 const OUTPUT_FILE = path.resolve(__dirname, '../src/modules/ai-balancer/infrastructure/provider-registry.json');
 
 async function syncProviderKnowledge() {
@@ -41,6 +41,7 @@ async function syncProviderKnowledge() {
             name: parsed.title,
             description: parsed.description,
             tier_status: parsed.provider_config?.tier_status || 'unknown',
+            tier_type: parsed.provider_config?.tier_type || 'unknown',
             usage_limits: parsed.provider_config?.usage_limits || {},
             models: parsed.provider_config?.models || {},
             env_required: parsed.implementation_binding?.env_required || []

@@ -45,14 +45,13 @@ export function createOpenRouterService(client: OpenRouterClient): AIService {
   return {
     name: 'OpenRouter',
     models: [
-      'meta-llama/llama-3-8b-instruct:free',
-      'google/gemma-7b-it:free',
-      'mistralai/mistral-7b-instruct:free',
+      'openrouter/free',
+      'google/gemma-3-12b-it:free',
     ],
-    async chat(messages: ChatMessage[]) {
+    async chat(messages: ChatMessage[], options?: { modelId: string }) {
       const stream = await client.chat.send({
         chatGenerationParams: {
-          model: MODEL_FREE,
+          model: options?.modelId || MODEL_FREE,
           messages: messages.map(toOpenRouterMessage),
           stream: true,
         },

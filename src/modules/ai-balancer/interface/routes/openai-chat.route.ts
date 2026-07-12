@@ -134,9 +134,16 @@ export async function handleOpenAIChat(
           headers: { 'Content-Type': 'application/json' },
         },
       );
-    } catch (err) {
-      logger.error({ err: (err as Error).message }, 'openai chat error');
-      return openaiJsonError(500, 'server_error', 'Internal server error');
+    } catch (err: any) {
+      logger.error({ err }, 'openai chat error details'); // log full error
+      logger.error({ err: err.message }, 'openai chat error');
+      
+      // Determine if it's an upstream authentication/rate-limit error we can forward
+      const status = err.status || err.statusCode || 500;
+      const message = err.error?.message || err.message || 'Internal server error';
+      const type = status === 401 ? 'invalid_api_key' : (status === 429 ? 'rate_limit_exceeded' : 'server_error');
+      
+      return openaiJsonError(status >= 400 && status < 600 ? status : 500, type, message);
     }
   }
 
@@ -171,15 +178,19 @@ export async function handleOpenAIChat(
         );
 
         controller.enqueue(encoder.encode(DONE_TOKEN));
-      } catch (err) {
-        logger.error({ err: (err as Error).message }, 'openai chat stream error');
+      } catch (err: any) {
+        logger.error({ err }, 'openai chat stream error details');
+        logger.error({ err: err.message }, 'openai chat stream error');
+        
+        const status = err.status || err.statusCode || 500;
+        const message = err.error?.message || err.message || 'Internal server error';
+        
         controller.enqueue(
           encoder.encode(
-            sseData({
-              error: { message: (err as Error).message, type: 'server_error' },
-            }),
+            sseData(chunkEvent(id, model, created, 0, { content: `\n\n[Error: ${status} - ${message}]` }, 'stop')),
           ),
         );
+        controller.enqueue(encoder.encode(DONE_TOKEN));
       } finally {
         controller.close();
       }
