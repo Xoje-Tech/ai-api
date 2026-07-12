@@ -12,6 +12,11 @@ export function createNvidiaService(): AIService {
 
   return {
     name: 'NVIDIA',
+    models: [
+      'meta/llama-3.1-70b-instruct',
+      'meta/llama-3.1-8b-instruct',
+      'meta/llama-3.1-405b-instruct',
+    ],
     async chat(messages: ChatMessage[]): Promise<AsyncIterable<string>> {
       const stream = await client.chat.completions.create({
         model: 'meta/llama-3.1-70b-instruct', // fallback default, will be overridden or used

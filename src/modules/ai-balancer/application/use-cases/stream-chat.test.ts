@@ -4,7 +4,7 @@ import { streamChat } from '@ai-balancer/application/use-cases/stream-chat.js';
 import type { AIService, ChatMessage } from '@ai-balancer/domain/ports/ai-service.port.js';
 
 const stubService = (name: string, chunks: string[] = []): AIService => ({
-  name,
+  name, models: [],
   chat: async () => {
     async function* gen() {
       for (const c of chunks) yield c;
@@ -29,7 +29,7 @@ describe('streamChat', () => {
 
   it('falls back to the next service when the first throws', async () => {
     const throwing: AIService = {
-      name: 'flaky',
+      name: 'flaky', models: [],
       chat: async () => {
         throw new Error('boom');
       },
@@ -49,13 +49,13 @@ describe('streamChat', () => {
   it('throws when every service in the balancer fails', async () => {
     const services: AIService[] = [
       {
-        name: 'A',
+        name: 'A', models: [],
         chat: async () => {
           throw new Error('A failed');
         },
       },
       {
-        name: 'B',
+        name: 'B', models: [],
         chat: async () => {
           throw new Error('B failed');
         },

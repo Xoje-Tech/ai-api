@@ -1,24 +1,53 @@
 ---
-type: AI Adapter
+type: Provider Profile
 title: OpenRouter
-description: Adapter wrapping @openrouter/sdk for chat completions with streaming SSE support.
-resource: src/modules/ai-balancer/infrastructure/adapters/openrouter.adapter.ts
-tags: [adapter, openrouter, ai-balancer, streaming]
-timestamp: 2026-07-03T06:53:09Z
+description: Unified API for multiple LLMs. We target their ":free" model variants as a load-balancing fallback.
+resource_url: https://openrouter.ai/docs#rate-limits
+tags: [provider, free-tier, openrouter, llm, ai-balancer, aggregator]
+timestamp: 2026-07-04T12:00:00Z
+provider_config:
+  tier_status: "free"
+  usage_limits:
+    rpm: 20
+    rpd: 200
+    tpm: 10000
+    tpd: 100000
+    concurrent_requests: 1
+  models:
+    "meta-llama/llama-3-8b-instruct:free":
+      description: "Free Llama 3 8B via OpenRouter"
+      context_window: 8192
+      max_output_tokens: 8192
+      pricing:
+        input_per_1m: 0.00
+        output_per_1m: 0.00
+    "google/gemma-7b-it:free":
+      description: "Free Gemma 7B via OpenRouter"
+      context_window: 8192
+      max_output_tokens: 8192
+      pricing:
+        input_per_1m: 0.00
+        output_per_1m: 0.00
+    "mistralai/mistral-7b-instruct:free":
+      description: "Free Mistral 7B via OpenRouter"
+      context_window: 32768
+      max_output_tokens: 32768
+      pricing:
+        input_per_1m: 0.00
+        output_per_1m: 0.00
+implementation_binding:
+  adapter_id: "openrouter"
+  env_required: ["OPENROUTER_API_KEY"]
 ---
-# OpenRouter Adapter
+# OpenRouter Provider Profile
 
-Source: `src/modules/ai-balancer/infrastructure/adapters/openrouter.adapter.ts`
+This document is the **source of truth** for OpenRouter's rate limits and configurations within `ai-api`.
+Because OpenRouter is an aggregator, rate limits on the free tier can vary heavily by model. The limits defined here act as our safest global baseline for `:free` endpoints to prevent 429s.
 
-Factory: `createOpenRouterService`. Service name: `OpenRouter`.
-
-## Environment
-
-This adapter reads:
-
-- `OPENROUTER_API_KEY`
+## Maintenance
+*   **Monitor Limits:** Check `https://openrouter.ai/docs#rate-limits` and their Discord for changes to free tier caps.
+*   **Sync to Code:** Run `pnpm run knowledge:sync` after editing this file to propagate the limits into the runtime config (`provider-registry.json`).
 
 ## Related
-
-- [OpenRouter](./openrouter.md) — sibling adapter.
+- [Groq](./groq.md) — sibling adapter.
 - [Endpoints](../api/endpoints.md) — HTTP surface.
