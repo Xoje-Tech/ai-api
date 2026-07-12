@@ -3,7 +3,7 @@ import type { AIService, ChatMessage } from '../../domain/ports/ai-service.port.
 
 export function createNvidiaService(): AIService {
   // The SDK takes the API key from process.env.NVIDIA_API_KEY by default
-  // But since the OpenAI constructor defaults to process.env.OPENAI_API_KEY, 
+  // But since the OpenAI constructor defaults to process.env.OPENAI_API_KEY,
   // we must pass it explicitly.
   const client = new OpenAI({
     apiKey: process.env.NVIDIA_API_KEY || '',
@@ -12,6 +12,9 @@ export function createNvidiaService(): AIService {
 
   return {
     name: 'NVIDIA',
+    models: [
+      'meta/llama-3.1-70b-instruct',
+    ],
     async chat(messages: ChatMessage[], options?: { modelId: string }): Promise<AsyncIterable<string>> {
       const stream = await client.chat.completions.create({
         model: options?.modelId || 'meta/llama-3.1-70b-instruct', // fallback default, will be overridden or used

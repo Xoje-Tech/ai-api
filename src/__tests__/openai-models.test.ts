@@ -4,8 +4,8 @@ import type { AIService } from '../modules/ai-balancer/domain/ports/ai-service.p
 
 const TEST_BEARER = 'test-key-1234567890abcdef';
 
-const stubService = (name: string, content: string): AIService => ({
-  name,
+const stubService = (name: string, content: string, models: string[] = []): AIService => ({
+  name, models,
   chat: async () => {
     async function* gen() {
       yield content;
@@ -25,9 +25,9 @@ describe('openai-route-contract: GET /v1/models', () => {
     else process.env.AI_API_KEY = prevKey;
   });
 
-  it('returns object:"list" with one entry per loaded adapter', async () => {
-    const groq = stubService('Groq', 'ok');
-    const openrouter = stubService('OpenRouter', 'ok');
+  it('returns object:"list" with one entry per model across loaded adapters', async () => {
+    const groq = stubService('Groq', 'ok', ['llama3-8b-8192', 'mixtral-8x7b-32768']);
+    const openrouter = stubService('OpenRouter', 'ok', ['llama3-8b-8192', 'mistralai/mistral-7b-instruct:free']);
     const app = buildApp({ services: [groq, openrouter] });
 
     const res = await app.request('/v1/models', {
@@ -38,14 +38,15 @@ describe('openai-route-contract: GET /v1/models', () => {
     expect(res.headers.get('content-type')).toContain('application/json');
     const body = (await res.json()) as {
       object: string;
-      data: { id: string; object: string; owned_by: string }[];
+      data: { id: string; object: string; owned_by: string; created: number }[];
     };
     expect(body.object).toBe('list');
     const ids = body.data.map((m) => m.id).sort();
-    expect(ids).toEqual(['groq', 'openrouter']);
+    expect(ids).toEqual(['llama3-8b-8192', 'mistralai/mistral-7b-instruct:free', 'mixtral-8x7b-32768']);
     for (const m of body.data) {
       expect(m.object).toBe('model');
       expect(m.owned_by).toBe('ai-api');
+      expect(m.created).toBeTypeOf('number');
     }
   });
 

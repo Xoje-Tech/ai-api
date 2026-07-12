@@ -40,6 +40,11 @@ const TOP_P = 1;
 export function createGroqService(client: GroqClient): AIService {
   return {
     name: 'Groq',
+    models: [
+      'llama3.1-8b',
+      'llama3.3-70b',
+      'qwen/qwen3-32b',
+    ],
     async chat(messages: ChatMessage[], options?: { modelId: string }) {
       const stream = await client.chat.completions.create({
         messages: messages.map(toGroqMessage),

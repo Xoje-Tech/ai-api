@@ -61,10 +61,11 @@ export function buildApp(options: BuildAppOptions): Hono {
 
     // ── OpenAI-compatible endpoints ─────────────────────────────────
     if (c.req.method === 'GET' && c.req.path === '/v1/models') {
+      const uniqueModels = Array.from(new Set(services.flatMap((s) => s.models)));
       return jsonResponse({
         object: 'list',
-        data: services.map((s) => ({
-          id: s.name.toLowerCase(),
+        data: uniqueModels.map((m) => ({
+          id: m,
           object: 'model',
           created: 0,
           owned_by: 'ai-api',

@@ -6,7 +6,7 @@ import type { Balancer } from '../../application/balancer/balancer.js';
 import type { AIService } from '../../domain/ports/ai-service.port.js';
 
 const stubService = (name: string, content: string): AIService => ({
-  name,
+  name, models: [],
   chat: async () => {
     async function* gen() {
       yield content;
